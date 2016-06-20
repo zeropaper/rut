@@ -83,7 +83,7 @@ module.exports = function rutServer(options, initFinished) {
     passport:           passport,
     port:               opt('port', '80'),
     protocol:           opt('protocol', 'https'),
-    schemes:            opt('schemes', ['https']),
+    schemes:            opt('schemes', ['https', 'http']),
     server:             server,
     serveStatic:        {},
     serviceYamlPattern: opt('serviceYamlPattern', '*/*.yaml'),

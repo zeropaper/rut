@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  title: OAuth2 implicit flow
+  description: |
+    Keep track of the bummers of you and your friends and celebrate!
+  version: 1.0.0
+host: 0.0.0.0:9090
+basePath: /implicit/v1
+produces:
+  - application/json
+schemes:
+  - http
+  - https
+securityDefinitions:
+  implicitOauth2:
+    type: oauth2
+    scopes:
+      app: all access
+    flow: implicit
+    authorizationUrl: http://localhost:9090/authorization?client_id=implicitv1&response_type=token
+paths:
+  '/':
+    get:
+      operationId: simpleGet
+      summary: Get information about authenticated user
+      responses:
+        '200':
+          description: Information about the authenticated user
+          schema:
+            type: object
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/restricted':
+    get:
+      security:
+        - implicitOauth2:
+          - app
+      operationId: restrictedGet
+      summary: Get information about authenticated user
+      responses:
+        '200':
+          description: Information about the authenticated user
+          schema:
+            type: object
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

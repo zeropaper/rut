@@ -1,0 +1,17 @@
+extends layout
+block content
+  section
+    header
+      h1 Services
+    div.content
+      ul
+        each service, id in services
+          li #{service.name}
+            ul
+              li
+                a(href= '/editor/' + service.name + '/' + service.version) Editor
+              li
+                a(href= '/docs/' + service.name + '/' + service.version) Documentation
+              li
+                a(href= '/authorization?client_id=' + service.id + '&response_type=token&redirect_uri=/account') Authorize
+

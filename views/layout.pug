@@ -1,0 +1,155 @@
+doctype html
+html
+  head
+    style.
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-size: 16px;
+        font-family: sans;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #333;
+        color: #ddd;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      a,
+      a:link {
+        color: #dda;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #ffa;
+      }
+
+      #page-header,
+      #page-content,
+      #page-footer {
+        position: absolute;
+        width: 100%;
+        padding: 0 1vw;
+      }
+
+      #page-header,
+      #page-footer {
+        background-color: #222;
+      }
+
+      #page-header {
+        top: 0;
+        height: 8vh;
+      }
+
+      #page-content {
+        overflow: auto;
+        top: 8vh;
+        bottom: 8vh;
+        padding: 1vh 1vw;
+      }
+
+      #page-footer {
+        bottom: 0;
+        height: 4vh;
+      }
+
+
+      #page-title,
+      #page-header .user,
+      #page-header .user li {
+        padding: 0;
+        margin: 0;
+      }
+
+      #page-title {
+        float: left;
+      }
+      #page-header .user {
+        float: right;
+      }
+
+      #page-header .user {
+        list-stye: none;
+        float: right;
+        margin-right: 1vw;
+      }
+      #page-header .user li {
+        display: inline-block;
+        margin-right: 1em;
+      }
+
+      body.dialog-open {
+        position: relative;
+      }
+
+      .dialog {
+        z-index: 99999;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .dialog .actions,
+      .dialog .inner {
+        position: absolute;
+        left: 2vw;
+        right: 2vw;
+      }
+
+      .dialog .actions {
+        text-align: right;
+        top: 2vh;
+        height: 4vh;
+        line-height: 4vh;
+      }
+
+      .dialog .inner {
+        background-color: #aaa;
+        bottom: 2vh;
+        top: 8vh;
+      }
+
+      .dialog .dismiss {
+        display: inline-block;
+        background-color: #aaa;
+        cursor: pointer;
+        padding: 0 8px;
+      }
+
+      .dialog iframe,
+      .dialog textarea {
+        border: none;
+        width: 100%;
+        height: 100%;
+      }
+  body
+    header#page-header
+      h1#page-title
+        a(href='/') Rut
+      unless noUserHeader
+        ul.user
+          unless user
+            li
+              a.login(href='/login') Log in
+            li
+              a.register(href='/register') Register
+          if user
+            li
+              a.account(href='/account')= user.username
+            li
+              a.logout(href='/logout') Log out
+    div#page-content
+      block content
+    footer#page-footer

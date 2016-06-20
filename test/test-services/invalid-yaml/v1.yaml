@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  title: Test Service A
+  description: |
+    Keep track of the bummers of you and your friends and celebrate!
+  version: 1.0.0
+host: 0.0.0.0:9090
+basePath: /invalid-yaml/v1
+produces:
+  - application/json
+schemes:
+  - http
+  - https
+securityDefinitions:
+  basicAuth:
+    # type: basic
+    description: HTTP Basic Authentication. Works over `HTTP` and `HTTPS`
+paths:
+  '/':
+    get:
+      operationId: simpleGet
+      security:
+       - basicAuth: []
+      summary: Get information about authenticated user
+      responses:
+        '200':
+          description: Information about the authenticated user
+          schema:
+            type: object
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

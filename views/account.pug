@@ -1,0 +1,171 @@
+extends layout
+block content
+  section
+    header
+      h1= user.username
+      a(href='/logout') Log out
+    div.content
+      div.clients
+        h1 API Client
+        ul
+          each client in clients
+            li #{client.name}
+              a(href= '/authorization?client_id=' + client.name + '&response_type=token&redirect_uri=/account') Authorize
+
+      div.client-tokens
+        h1 API Client Access Tokens
+        ul
+          each token in tokens
+            li #{token.client.name}
+              span.moment Expires: #{token.expirationDate}
+              div.input #{token.token}
+              a.revoke-token(href='/revoke/' + token.id) Revoke
+    footer
+  style.
+    body.dialog-open {
+      position: relative;
+    }
+
+    .dialog {
+      z-index: 99999;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .dialog .actions,
+    .dialog .inner {
+      position: absolute;
+      left: 2vw;
+      right: 2vw;
+    }
+
+    .dialog .actions {
+      text-align: right;
+      top: 2vh;
+      height: 4vh;
+      line-height: 4vh;
+    }
+
+    .dialog .inner {
+      background-color: #aaa;
+      bottom: 2vh;
+      top: 8vh;
+    }
+
+    .dialog .dismiss {
+      display: inline-block;
+      background-color: #aaa;
+      cursor: pointer;
+      padding: 0 8px;
+    }
+
+    .dialog iframe,
+    .dialog textarea {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  script.
+    //
+    function parse (qs) {
+      var obj = {};
+      var params = (qs || '').replace(/\?/, '').split(/&amp;|&/);
+      var l = params.length;
+      for (var i = 0; i < l; i++) {
+        if (params[i]) {
+          var index = params[i].indexOf('=');
+          if (index === -1) index = params[i].length;
+          var key = params[i].substring(0, index);
+          var val = params[i].substring(index + 1);
+          if (has(obj, key)) {
+            if (!isArray(obj[key])) obj[key] = [obj[key]];
+            obj[key].push(val);
+          } else {
+            obj[key] = val;
+          }
+        }
+      }
+      return obj;
+    }
+
+    function has (obj, key) {
+      return obj.hasOwnProperty(key);
+    }
+
+    function isArray (thing) {
+      return Object.prototype.toString.call(thing) === '[object Array]';
+    }
+
+    //
+    function openDialog(init) {
+      var bdyClasses = document.body.classList;
+      function dismiss() {
+        bdyClasses.remove('dialog-open');
+        dialog.parentNode.removeChild(dialog);
+      }
+
+      bdyClasses.add('dialog-open');
+      var dialog = document.createElement('div');
+      dialog.className = 'dialog';
+      var actionsWrapper = document.createElement('div');
+      actionsWrapper.className = 'actions';
+
+      var closeBtn = document.createElement('a');
+      closeBtn.className = 'dismiss';
+      closeBtn.textContent = 'Close';
+      closeBtn.addEventListener('click', dismiss);
+      actionsWrapper.appendChild(closeBtn);
+
+      dialog.appendChild(actionsWrapper);
+
+      var inner = document.createElement('div');
+      inner.className = 'inner';
+      dialog.appendChild(inner);
+
+      init(dialog, dismiss);
+
+      document.body.appendChild(dialog);
+    }
+
+
+    [].slice.apply(document.querySelectorAll('div.clients li > a')).forEach(function (link) {
+      link.addEventListener('click', function (evt) {
+        evt.preventDefault();
+
+        openDialog(function (dialog, dismiss) {
+          var iframe = document.createElement('iframe');
+
+          iframe.src = link.href;
+
+          dialog.querySelector('.inner').appendChild(iframe);
+
+          iframe.addEventListener('load', function () {
+            var doc;
+
+            try {
+              doc = iframe.contentDocument;
+            }
+            catch (e) {}
+
+            if (!doc) { return; }
+
+            var hashVars = parse(doc.location.hash.slice(1));
+            if (!hashVars.access_token) {
+              return;
+            }
+
+            openDialog(function (secondDialog) {
+              var textarea = document.createElement('textarea');
+              textarea.value = hashVars.access_token;
+              secondDialog.querySelector('.inner').appendChild(textarea);
+            });
+
+            dismiss();
+          });
+        });
+      });
+    });

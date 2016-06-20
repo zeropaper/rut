@@ -1,0 +1,5 @@
+node_modules
+*.log
+.tmp
+api/strich/v1/public
+/routes.generated.txt

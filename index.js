@@ -356,7 +356,10 @@ module.exports = function rutServer(options, initFinished) {
 
       async.map(serviceNames, function (name, n) {
         var service = setup.services[name];
-        var redirectURI = options.env === 'development' ? ('http://localhost:9091/' + service.name + '-' + service.version + '#/oauth/callback') : null;
+        // that part sucks... but i need it to work
+        var redirectURI = options.env === 'development' ?
+                          ('http://localhost:9091/' + service.name + '-' + service.version + '#/oauth/callback') :
+                          'https://zeropaper.github.io/' + service.name + '/';
 
         Client.findOne({name:name}, function (err, client) {
           if (err) { return n(err); }

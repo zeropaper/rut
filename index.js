@@ -20,7 +20,6 @@ var ui = require('./lib/rut-ui');
 var rutDevIndex = require('./lib/rut-index');
 
 function values(obj) {
-  // if (Object.values) { return Object.values(obj); }
   return Object.keys(obj).map(function (key) {
     return obj[key];
   });
@@ -345,9 +344,7 @@ module.exports = function rutServer(options, initFinished) {
   //
   setupOperations.serviceClients = function (setup, done) {
     done = addAndPassSetup('serviceClients', setup, done);
-    var serviceNames = Object.keys(setup.services)/*.map(function (service) {
-      return service;
-    })*/;
+    var serviceNames = Object.keys(setup.services);
 
     var Client = setup.db.model('APIClient');
     debug('ensure api clients for frontends');

@@ -256,7 +256,7 @@ module.exports = function rutServer(options, initFinished) {
       admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
       token: String,
       secret: String,
-      redirectURI: String,
+      redirectURI: { type: String, required: true },
     }), {
       timestamps: {}
     });

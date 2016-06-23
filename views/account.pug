@@ -5,21 +5,22 @@ block content
       h1= user.username
       a(href='/logout') Log out
     div.content
-      div.clients
-        h1 API Client
-        ul
-          each client in clients
-            li #{client.name}
-              a(href= '/authorization?client_id=' + client.name + '&response_type=token&redirect_uri=/account') Authorize
-
-      div.client-tokens
-        h1 API Client Access Tokens
-        ul
-          each token in tokens
-            li #{token.client.name}
-              span.moment Expires: #{token.expirationDate}
-              div.input #{token.token}
-              a.revoke-token(href='/revoke/' + token.id) Revoke
+      if clients.length
+        div.clients
+          h1 API Client
+          ul
+            each client in clients
+              li #{client.name}
+                a(href= '/authorization?client_id=' + client.name + '&response_type=token&redirect_uri=/account') Authorize
+      if tokens.length
+        div.client-tokens
+          h1 API Client Access Tokens
+          ul
+            each token in tokens
+              li #{token.client.name}
+                span.moment Expires: #{token.expirationDate}
+                div.input #{token.token}
+                a.revoke-token(href='/revoke/' + token.id) Revoke
     footer
   style.
     body.dialog-open {

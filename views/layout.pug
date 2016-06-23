@@ -10,6 +10,7 @@ html
 
       body {
         font-size: 16px;
+        line-height: 1.618;
         font-family: sans;
         position: relative;
         width: 100%;
@@ -32,12 +33,61 @@ html
         color: #ffa;
       }
 
+      input,
+      label {
+        font-size: 16px;
+        display: block;
+      }
+
+      input {
+        border: 1px solid;
+        border-width: 0 0 1px 0;
+        background: transparent;
+        color: inherit;
+        padding: 4px 8px;
+        width: 100%;
+      }
+
+      label::after {
+        display: inline;
+        content: ':';
+      }
+
+      input[type=submit],
+      input[type=submit] {
+        width: auto;
+        cursor: pointer;
+        margin-left: auto;
+        border-width: 1px;
+        margin-right: 0;
+        border-radius: 2px;
+      }
+
+      input:hover,
+      input:focus {
+        color: #fff;
+        background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.6));
+      }
+
+      input:focus {
+        outline: none;
+        box-shadow: 0 1px 0 0 currentColor;
+      }
+
+
       #page-header,
       #page-content,
       #page-footer {
         position: absolute;
         width: 100%;
         padding: 0 1vw;
+      }
+
+      #page-header > *,
+      #page-content > *,
+      #page-footer > * {
+        max-width: 550px;
+        margin: 0 auto;
       }
 
       #page-header,
@@ -136,8 +186,9 @@ html
       }
   body
     header#page-header
-      h1#page-title
-        a(href='/') Rut
+      div
+        h1#page-title
+          a(href='/') Rut
       unless noUserHeader
         ul.user
           unless user

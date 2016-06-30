@@ -88,7 +88,8 @@ module.exports = function rutServer(options, initFinished) {
     serviceYamlPattern: opt('serviceYamlPattern', '*/*.yaml'),
     userSchemaDef:      opt('userSchemaDef', {}),
     useStubs:           opt('useStubs', false),
-    validateResponse:   opt('validateResponse', true)
+    validateResponse:   opt('validateResponse', true),
+    tokenLifeSpan:      opt('tokenLifeSpan', 3600 * 1000)
   };
   setupResults.prodHost = opt('prodHost', setupResults.ip);
 

@@ -1,0 +1,62 @@
+extends layout
+block content
+  if models
+    each count, name in models
+      section(id=name)
+        header
+          h1
+            a(href='/inspect/' + name) #{name}&nbsp;
+            span.label #{count}
+  if modelName
+    section
+      header
+        h1 #{modelName}
+        a(href="/inspect") Models
+    div.content
+      div.statics
+        h2 statics
+        ul
+          each fn, name in model.schema.statics
+            li #{modelName}.
+              code #{name}()
+      div.methods
+        h2 methods
+        ul
+          each fn, name in model.schema.methods
+            li instance.
+              code #{name}()
+      div.paths
+        h2 paths
+        table#documents
+          thead
+            tr.path
+              each path, name in model.schema.paths
+                th #{name}
+            tr.instance
+              each path, name in model.schema.paths
+                th #{path.instance}
+          tbody
+            each document in documents
+              tr
+                each path, name in model.schema.paths
+                  td #{document[name]}
+  style.
+    #documents {
+      border-collapse: collapse;
+      border: 1px solid #4e4949;
+      font-size: 0.8rem;
+      table-layout: fixed;
+      width: 100%;
+      max-width: 100%;
+    }
+    #document thead {
+      text-align: center;
+    }
+    #documents th,
+    #documents td {
+      padding: 3px 6px;
+      border: 1px solid #4e4949;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }

@@ -2,7 +2,7 @@
 
 var rut = require(__dirname + '/index');
 
-var ip = process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+var ip = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
 var port = process.env.OPENSHIFT_NODEJS_PORT || '9090';
 var env = process.env.OPENSHIFT_NODEJS_IP ? 'production' : (process.env.NODE_ENV || 'development');
 

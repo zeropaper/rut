@@ -7,18 +7,18 @@ html
       div
         h1#page-title
           a(href='/') Rut
-      unless noUserHeader
-        ul.user
-          unless user
-            li
-              a.login(href='/login') Log in
-            li
-              a.register(href='/register') Register
-          if user
-            li
-              a.account(href='/account')= user.username
-            li
-              a.logout(href='/logout') Log out
+        unless noUserHeader
+          ul.user
+            unless user
+              li
+                a.login(href='/login') Log in
+              li
+                a.register(href='/register') Register
+            if user
+              li
+                a.account(href='/account')= user.username
+              li
+                a.logout(href='/logout') Log out
     div#page-content
       block content
     footer#page-footer

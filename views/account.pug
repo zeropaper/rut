@@ -2,25 +2,29 @@ extends layout
 block content
   section
     header
-      h1= user.username
-      a(href='/logout') Log out
+      h1 #{user.username}'s account
     div.content
       if clients.length
         div.clients
-          h1 API Client
+          h2 API Client
           ul
             each client in clients
-              li #{client.name}
+              li #{client.name}&nbsp;
                 a(href= '/authorization?client_id=' + client.name + '&response_type=token&redirect_uri=/account') Authorize
+          div
+            a.btn(href='/client/register') Register a client
       if tokens.length
         div.client-tokens
-          h1 API Client Access Tokens
+          h2 API Client Access Tokens
           ul
             each token in tokens
-              li #{token.client.name}
+              li
+                h3 #{token.client.name}
                 span.moment Expires: #{token.expirationDate}
-                div.input #{token.token}
-                a.revoke-token(href='/revoke/' + token.id) Revoke
+                br
+                span.input #{token.token}
+                br
+                a.btn.revoke-token(href='/account/revoke/' + token.id) Revoke
     footer
   style.
     body.dialog-open {

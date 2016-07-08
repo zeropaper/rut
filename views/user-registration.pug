@@ -3,10 +3,16 @@ block content
     div
       form(action='/registration',method='post')
         p
-            label(for='username') Username:
-               input(id='username', type='text',value='', name='username')
+          label(for='username') Username:
+            input(id='username', type='text',value='', name='username')
         p
-            label(for='password') Password:
-               input(id='password', type='password',value='', name='password')
-        p
-            input(type='submit',value='Sign up')
+          label(for='password') Password:
+            input(id='password', type='password',value='', name='password')
+        p.actions
+          input(type='submit',value='Sign up')
+      if authServices
+        div.oauth
+          h3 You can also quickly register with those services
+          each service, name in authServices
+            div(class=service.name)
+              a.btn(href='/auth/' + name) Register with #{service.name}

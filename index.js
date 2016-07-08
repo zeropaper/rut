@@ -7,7 +7,6 @@ var async = require('async');
 var debug = require('debug')('rut:core');
 
 var express = require('express');
-var serveStatic = require('serve-static');
 var expressSession = require('express-session');
 var MongoStore = require('connect-mongo/es5')(expressSession);
 var passport = require('passport');
@@ -59,10 +58,6 @@ module.exports = function rutServer(options, initFinished) {
 
 
   var server = options.server = http.createServer(app);
-
-
-  var swaggerClientPath = 'node_modules/swagger-client/browser/swagger-client' + (options.env === 'production' ? '.min' : '') + '.js';
-  app.use('/js/swagger-client.js', serveStatic(swaggerClientPath));
 
   var db = mongoose.createConnection();
 

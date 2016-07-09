@@ -74,6 +74,7 @@ module.exports = function rutServer(options, initFinished) {
     env:                opt('env', 'development'),
     ip:                 opt('ip', '0.0.0.0'),
     mongoose:           mongoose,
+    oauthProviders:     opt('oauthProviders', {}),
     passport:           passport,
     port:               opt('port', '80'),
     protocol:           opt('protocol', 'https'),

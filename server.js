@@ -18,6 +18,10 @@ var options = {
   prodHost: process.env.OPENSHIFT_APP_DNS,
 };
 
+var oauthProviders = options.oauthProviders = {};
+// oauthProviders.FACEBOOK_APP_ID = 'YOUR_APP_ID';
+// oauthProviders.FACEBOOK_APP_SECRET = 'YOUR_APP_SECRET';
+
 
 if (env === 'production') {
   options.dbWipe = false;

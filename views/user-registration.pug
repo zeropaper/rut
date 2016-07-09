@@ -4,12 +4,15 @@ block content
       form(action='/registration',method='post')
         p
           label(for='username') Username:
-            input(id='username', type='text',value='', name='username')
+          input(id='username', type='text',value='', name='username')
         p
           label(for='password') Password:
-            input(id='password', type='password',value='', name='password')
+          input(id='password', type='password',value='', name='password')
+        p
+          label(for='password-confirm') Password confirmation:
+          input(id='password-confirm', type='password',value='', name='passwordConfirm')
         p.actions
-          input(type='submit',value='Sign up')
+          input.yes(type='submit',value='Sign up')
       if authServices
         div.oauth
           h3 You can also quickly register with those services

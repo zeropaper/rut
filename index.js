@@ -15,7 +15,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 var addAndPassSetup = require('./lib/add-and-pass-setup');
 
-var ui = require('./lib/rut-ui');
+var rutUi = require('./lib/rut-ui');
 var rutDevIndex = require('./lib/rut-index');
 
 function values(obj) {
@@ -219,6 +219,20 @@ module.exports = function rutServer(options, initFinished) {
 
 
 
+
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  setupOperations.ui = rutUi;
+
+
+
+
   //
   //
   //
@@ -227,6 +241,7 @@ module.exports = function rutServer(options, initFinished) {
   //
   //
   setupOperations.coreDbSchemes = function (setup, done) {
+    debug('setup.userSchemaDef', setup.userSchemaDef);
     var userSchema = new Schema(assign({}, setup.userSchemaDef, {}), {
       timestamps: {}
     });
@@ -390,20 +405,6 @@ module.exports = function rutServer(options, initFinished) {
       }, done);
     });
   };
-
-
-
-
-
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  setupOperations.ui = ui;
 
 
 

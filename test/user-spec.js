@@ -10,7 +10,10 @@ describe('User model', function () {
     this.timeout(2000);
     utils.cleanRut(utils.options({
       serviceYamlPattern: 'simple/*.yaml',
-      apiDir: './test/test-services/'
+      apiDir: './test/test-services/',
+      userSchemaDef: {
+        someProperty: String
+      }
     }), function (err, result) {
       setup = result;
       User = setup.db.model('User');
@@ -21,6 +24,10 @@ describe('User model', function () {
 
   it('is registered by the core', function () {
     expect(User).not.to.be(undefined);
+  });
+
+  it('can have custom properties', function () {
+    expect(User.schema.paths.someProperty).not.to.be(undefined);
   });
 
   describe('username', function () {

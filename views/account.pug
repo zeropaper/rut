@@ -4,9 +4,19 @@ block content
     header
       h1 #{user.username}'s account
     div.content
+      form(method='post', target='/account')
+        p
+          input(name='username',type='text',placeholder='yourusername',value= user.username)
+        p.actions
+          input.yes(type='submit', value='Change')
+      if user.facebookId
+        p Facebook ID: #{user.facebookId}&nbsp;
+          a(href='/auth/facebook/forget') Forget
+      unless user.facebookId
+        a(href='/auth/facebook') Connect with Facebook
       if clients.length
         div.clients
-          h2 API Client
+          h2 Your API Clients
           ul
             each client in clients
               li #{client.name}&nbsp;

@@ -355,7 +355,9 @@ module.exports = function rutServer(options, initFinished) {
                           ('http://localhost:9091/' + service.name + '-' + service.version + '#/oauth/callback') :
                           'https://zeropaper.github.io/' + service.name + '/';
 
-        Client.findOne({name:name}, function (err, client) {
+        Client.findOne({name:name})
+        .populate('owner')
+        .exec(function (err, client) {
           if (err) { return n(err); }
           if (!client) {
             debug('  %s does not have client', name);
@@ -371,12 +373,13 @@ module.exports = function rutServer(options, initFinished) {
             });
           }
 
-          debug('  %s already have client', name);
-          if (client.redirectURI === redirectURI) {
+          debug('  %s already have client owned by client.owner', name, client.owner);
+          if (client.redirectURI === redirectURI && client.owner) {
             debug('    %s already up-to-date', name);
             return n(null, client.name);
           }
 
+          client.owner = rutUser;
           client.redirectURI = redirectURI;
           client.save(function (err) {
             if (err) { return n(err); }
@@ -553,7 +556,7 @@ module.exports = function rutServer(options, initFinished) {
       debug('  rut initialization error:\n%s', err.stack);
       return initFinished(err);
     }
-
+    debug('  rut initialization complete');
     initFinished(null, setupResults);
   });
 };

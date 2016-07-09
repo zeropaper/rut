@@ -78,7 +78,7 @@ describe('rut server', function () {
     });
   });
 
-  describe.skip('production environment', function () {
+  describe('production environment', function () {
     var app;
 
     before(function (done) {
@@ -92,11 +92,12 @@ describe('rut server', function () {
       });
     });
 
-    it('does not serve a landing page', function (done) {
+    it('redirects index to /account', function (done) {
       request(app)
         .get('/')
         .set('Accept', 'text/html')
-        .expect(404, done);
+        .set('Location', '/account')
+        .expect(302, done);
     });
   });
 });

@@ -7,31 +7,29 @@ var request = require('supertest');
 
 
 describe('rut server', function () {
-
+  var validTestYaml = {
+    serviceYamlPattern: '{simple,implicit}/*.yaml',
+    apiDir: './test/test-services/'
+  };
+  this.timeout(10000);
   this.slow(4000);
 
   describe('basic initialization', function () {
     var setup;
 
     it('initializes', function (done) {
-      this.timeout(1000);
-      this.slow(600);
-      utils.cleanRut(utils.options(), done);
+      utils.cleanRut(utils.options(validTestYaml), done);
     });
 
     it('can be reset', function (done) {
-      this.timeout(1000);
-      this.slow(600);
-      utils.cleanRut(utils.options(), function (err, result) {
+      utils.cleanRut(utils.options(validTestYaml), function (err, result) {
         setup = result;
         done(err);
       });
     });
 
     xit('can be reset (again)', function (done) {
-      this.timeout(1000);
-      this.slow(300);
-      utils.cleanRut(utils.options(), function (err, result) {
+      utils.cleanRut(utils.options(validTestYaml), function (err, result) {
         setup = result;
         done(err);
       });
@@ -65,9 +63,7 @@ describe('rut server', function () {
     var app;
 
     before(function (done) {
-      this.timeout(1000);
-      this.slow(300);
-      utils.cleanRut(utils.options(), function (err, result) {
+      utils.cleanRut(utils.options(validTestYaml), function (err, result) {
         app = result.app;
         done(err);
       });
@@ -82,13 +78,13 @@ describe('rut server', function () {
     });
   });
 
-  describe('production environment', function () {
+  describe.skip('production environment', function () {
     var app;
 
     before(function (done) {
-      this.timeout(1000);
-      this.slow(300);
       utils.cleanRut(utils.options({
+        serviceYamlPattern: '{simple,implicit}/*.yaml',
+        apiDir: './test/test-services/',
         env: 'production'
       }), function (err, result) {
         app = result.app;

@@ -5,16 +5,18 @@ var request = require('supertest');
 var serviceLib = require('./../lib/service');
 
 
-describe.only('rut service', function () {
+describe('rut service', function () {
+  this.timeout(3000);
 
   describe('discover(setup)', function () {
     var setup;
 
-    before(function (done) {
+    it('discovers YALM files', function (done) {
       setup = utils.options({
         serviceYamlPattern: 'simple/*.yaml',
         apiDir: './test/test-services/'
       });
+
       serviceLib.discover(setup, done);
     });
 
@@ -110,7 +112,7 @@ describe.only('rut service', function () {
 
     it('serves the definition as JSON', function (done) {
       request(setup.app)
-        .get('/docs/simple/v1.json')
+        .get('/simple/v1.json')
         .expect(200)
         .expect('Content-Type', /json/, done);
     });

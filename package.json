@@ -6,7 +6,7 @@
   "scripts": {
     "dev-start": "nodemon -w lib/ -w server.js -w index.js server.js",
     "test": "mocha",
-    "test-dev-start": "mocha -w test/**/*-spec.js"
+    "test-dev-start": "nodemon -w test --exec \"./node_modules/.bin/mocha --bail\""
   },
   "keywords": [
     "swagger",

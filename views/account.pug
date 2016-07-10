@@ -9,11 +9,21 @@ block content
           input(name='username',type='text',placeholder='yourusername',value= user.username)
         p.actions
           input.yes(type='submit', value='Change')
+
       if user.facebookId
         p Facebook ID: #{user.facebookId}&nbsp;
           a(href='/auth/facebook/forget') Forget
       unless user.facebookId
-        a(href='/auth/facebook') Connect with Facebook
+        p
+          a(href='/auth/facebook') Connect with Facebook
+
+      if user.githubId
+        p GitHub ID: #{user.githubId}&nbsp;
+          a(href='/auth/github/forget') Forget
+      unless user.githubId
+        p
+          a(href='/auth/github') Connect with GitHub
+
       if clients.length
         div.clients
           h2 Your API Clients

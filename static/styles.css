@@ -252,43 +252,6 @@ form .actions input[type=button]:last-child {
 }
 
 
-.messages {
-  position: fixed;
-  top: 8vh;
-  left: 0;
-  right: 0;
-  opacity: 1;
-  transition: opacity 0.218s ease-in-out;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0;
-}
-.messages:empty {
-  opacity: 0;
-}
-
-.messages ul, .messages li {
-  display: block;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.messages ul {
-  background-color: #4e4e4e;
-  color: #aaa;
-}
-.messages .error {
-  background-color: #a33;
-}
-
-.message ul > li {
-  padding: 1vh;
-}
-
-
-
-
 
 .messages {
   position: fixed;

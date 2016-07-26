@@ -69,7 +69,7 @@ h5 {
 
 input,
 label {
-  font-size: 16px;
+  font-size: 1rem;
   display: inline-block;
 }
 
@@ -92,9 +92,12 @@ input:hover,
 input:focus {
   color: #fff;
   /* background-image: linear-gradient(to bottom, transparent, rgba(121,121,121,.2)); */
+  outline: none;
 }
 
-input:focus {
+input:focus:not(.btn),
+input:focus:not(type="button"),
+input:focus:not(type="submit") {
   outline: none;
   box-shadow: 0 1px 0 0 currentColor;
 }
@@ -106,6 +109,8 @@ input[type=button] {
   cursor: pointer;
   border: none;
   border-radius: 2px;
+  color: #333;
+  background-color: #ddd;
 }
 
 button:hover,
@@ -115,28 +120,40 @@ button:focus,
 input[type=submit]:focus,
 input[type=button]:focus {
   border: none;
+  background-color: #eee;
+  color: #222;
 }
 
 button.yes,
 input[type=submit].yes,
 input[type=button].yes {
   background-color: #338c33;
+  color: #ddd;
 }
 button.yes:hover,
 input[type=submit].yes:hover,
-input[type=button].yes:hover {
+input[type=button].yes:hover,
+button.yes:focus,
+input[type=submit].yes:focus,
+input[type=button].yes:focus {
   background-color: #4a4;
+  color: #eee;
 }
 
 button.no,
 input[type=submit].no,
 input[type=button].no {
   background-color: #a33;
+  color: #ddd;
 }
 button.no:hover,
 input[type=submit].no:hover,
-input[type=button].no:hover {
+input[type=button].no:hover,
+button.no:focus,
+input[type=submit].no:focus,
+input[type=button].no:focus {
   background-color: #a44;
+  color: #eee;
 }
 
 button.link,
@@ -222,15 +239,17 @@ form .actions input[type=button]:last-child {
 }
 
 #page-header .user {
-  list-stye: none;
+  list-style: none;
   float: right;
-  margin-right: 1vw;
+  margin: 0;
 }
 #page-header .user li {
   display: inline-block;
   margin-right: 1em;
 }
-
+#page-header .user li:last-of-type {
+  margin: 0;
+}
 
 
 .messages {

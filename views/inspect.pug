@@ -6,7 +6,8 @@ block content
         header
           h1
             a(href='/inspect/' + name) #{name}&nbsp;
-            span.label #{count}
+            span.label #{count}&nbsp;
+            a(href='/dump/' + name) dump
   if modelName
     section
       header

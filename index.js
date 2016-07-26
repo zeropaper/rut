@@ -79,6 +79,7 @@ module.exports = function rutServer(options, initFinished) {
     passport:           passport,
     port:               opt('port', '80'),
     protocol:           opt('protocol', 'https'),
+    rutUsername:        rutUsername,
     schemes:            opt('schemes', ['https', 'http']),
     server:             server,
     serveStatic:        {},

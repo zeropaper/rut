@@ -6,7 +6,11 @@ block content
     div.content
       ul
         each service, id in services
-          li #{service.name}
+          li
+            if service.definition.info['x-rut-frontend']
+              a.frontend(href= service.definition.info['x-rut-frontend']) #{service.name}
+            unless service.definition.info['x-rut-frontend']
+              span.no-frontend #{service.name}
             ul
               li
                 a(href= '/editor/' + service.name + '/' + service.version) Editor

@@ -12,14 +12,14 @@ block content
 
       if user.facebookId
         p Facebook ID: #{user.facebookId}&nbsp;
-          a(href='/auth/facebook/forget') Forget
+          a(href='/account/facebook/forget') Forget
       unless user.facebookId
         p
           a(href='/auth/facebook') Connect with Facebook
 
       if user.githubId
         p GitHub ID: #{user.githubId}&nbsp;
-          a(href='/auth/github/forget') Forget
+          a(href='/account/github/forget') Forget
       unless user.githubId
         p
           a(href='/auth/github') Connect with GitHub

@@ -45,6 +45,7 @@ module.exports = function rutServer(options, initFinished) {
   debug('  Base URL %s', baseUrl);
 
   var rutPassword = opt('rutPassword', 'insecure');
+  var rutUsername = opt('rutUsername', 'rut');
 
   var mongoose = options.mongoose || require('mongoose');
   var Schema = mongoose.Schema;
@@ -327,10 +328,10 @@ module.exports = function rutServer(options, initFinished) {
     done = addAndPassSetup('adminUser', setup, done);
 
     debug('rut (admin) user');
-    User.findByUsername('rut', function (err, user) {
+    User.findByUsername(rutUsername, function (err, user) {
       if (!err && !user) {
         debug('  does not exitst');
-        User.register({username: 'rut'}, rutPassword, done);
+        User.register({username: rutUsername}, rutPassword, done);
       }
       else if (user) {
         debug('  exists');

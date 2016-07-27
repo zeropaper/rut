@@ -20,11 +20,12 @@ html
               li
                 a.logout(href='/logout') Log out
       ul.messages
-        each msgs, type in messages
-          li(class= type)
-            ul
-              each msg in msgs
-                li #{msg}
+        if messages
+          each msgs, type in messages
+            li(class= type)
+              ul
+                each msg in msgs
+                  li #{msg}
     div#page-content
       block content
     footer#page-footer

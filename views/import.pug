@@ -1,0 +1,15 @@
+extends layout
+block content
+  form(method='post',enctype='multipart/form-data')
+    p
+      label.select
+        span.text Model
+        select(name='modelName')
+          each modelName in models
+            option(value=modelName) #{modelName}
+    p
+      label.file
+        span.text JSON file
+        input(type='file',name='file')
+    p.actions
+      input(type='submit',value='Send')

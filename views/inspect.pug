@@ -1,6 +1,7 @@
 extends layout
 block content
   if models
+    a.btn.import(href='/import') Import
     each count, name in models
       section(id=name)
         header
@@ -11,7 +12,8 @@ block content
   if modelName
     section
       header
-        h1 #{modelName}
+        h1 #{modelName}&nbsp;
+          a(href="/dump/" + modelName) dump
         a(href="/inspect") Models
     div.content
       div.statics
@@ -26,21 +28,21 @@ block content
           each fn, name in model.schema.methods
             li instance.
               code #{name}()
-      div.paths
-        h2 paths
-        table#documents
-          thead
-            tr.path
-              each path, name in model.schema.paths
-                th #{name}
-            tr.instance
-              each path, name in model.schema.paths
-                th #{path.instance}
-          tbody
-            each document in documents
-              tr
-                each path, name in model.schema.paths
-                  td #{document[name]}
+      //- div.paths
+      //-   h2 paths
+      //-   table#documents
+      //-     thead
+      //-       tr.path
+      //-         each path, name in model.schema.paths
+      //-           th #{name}
+      //-       tr.instance
+      //-         each path, name in model.schema.paths
+      //-           th #{path.instance}
+      //-     tbody
+      //-       each document in documents
+      //-         tr
+      //-           each path, name in model.schema.paths
+      //-             td #{document[name]}
   style.
     #documents {
       border-collapse: collapse;

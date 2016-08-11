@@ -1,7 +1,7 @@
 'use strict';
 var utils = {};
 
-var rut = require('./../index');
+var rut = require(__dirname + '/../index');
 var assign = require('lodash.assign');
 var async = require('async');
 
@@ -20,20 +20,9 @@ utils.options = function options(given) {
 };
 
 var db;
-// var Mongoose = require('mongoose').Mongoose;
-// var mongoose = new Mongoose();
-// var mockgoose = require('mockgoose');
-
-
 utils.cleanRut = function cleanRut(opts, done) {
   async.series({
-    // cleanupDb: function (cb) {
-    //   if (!db || !db.modelNames) { return cb(); }
 
-    //   async.map(db.modelNames(), function (className, c) {
-    //     db.model(className).find({}).remove(c);
-    //   }, cb);
-    // },
     disconnectDb: function (cb) {
       if (!db || !db.disconnect) { return cb(); }
 
@@ -44,30 +33,6 @@ utils.cleanRut = function cleanRut(opts, done) {
         db = results.db || db;
         cb(err, results);
       });
-    // },
-    // createTestUser: function (cb) {
-    //   var User = _results.db.model('User');
-    //   function create() {
-    //     User.register({
-    //       username: 'testuser'
-    //     }, 'testpassword', function (err, testuser) {
-    //       if (err) { return cb(err); }
-    //       cb(null, testuser);
-    //     });
-    //   }
-
-    //   User.findByUsername('testuser', function (err, existing) {
-    //     if (err) { return cb(err); }
-
-    //     if (existing) {
-    //       return existing.remove(function (err) {
-    //         if (err) { return cb(err); }
-    //         create();
-    //       });
-    //     }
-
-    //     create();
-    //   });
     }
   }, function (err, results) {
     if (err) { return done(err); }

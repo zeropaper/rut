@@ -28,21 +28,22 @@ block content
           each fn, name in model.schema.methods
             li instance.
               code #{name}()
-      //- div.paths
-      //-   h2 paths
-      //-   table#documents
-      //-     thead
-      //-       tr.path
-      //-         each path, name in model.schema.paths
-      //-           th #{name}
-      //-       tr.instance
-      //-         each path, name in model.schema.paths
-      //-           th #{path.instance}
-      //-     tbody
-      //-       each document in documents
-      //-         tr
-      //-           each path, name in model.schema.paths
-      //-             td #{document[name]}
+      div.paths
+        h2 paths
+        table#documents
+          thead
+            tr.path
+              each path, name in model.schema.paths
+                th #{name}
+            tr.instance
+              each path, name in model.schema.paths
+                th #{path.instance}
+          tbody
+            if documents.length < 100
+              each document in documents
+                tr
+                  each path, name in model.schema.paths
+                    td #{document[name]}
   style.
     #documents {
       border-collapse: collapse;

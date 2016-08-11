@@ -362,7 +362,7 @@ module.exports = function rutServer(options, initFinished) {
 
     var Client = setup.db.model('APIClient');
     debug('ensure api clients for frontends');
-    setup.db.model('User').findByUsername('rut', function (err, rutUser) {
+    setup.db.model('User').findByUsername(setup.rutUsername, function (err, rutUser) {
       if (err) { return done(err); }
 
       async.map(serviceNames, function (name, n) {

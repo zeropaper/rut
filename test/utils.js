@@ -2,9 +2,12 @@
 var utils = {};
 
 var rut = require(__dirname + '/../index');
+var uid = require(__dirname + '/../lib/uid');
 var assign = require('lodash.assign');
 var async = require('async');
 var request = require('supertest');
+var crypto = require('crypto');
+
 
 var defaultOptions = {
   dbWipe: true,
@@ -25,21 +28,21 @@ utils.expect = require('expect.js');
 
 var _testUserCount = 0;
 function rutUtils(results) {
-  var utils = {};
+  var obj = {};
   var rut = results.rut;
-  utils.request = function rutRequest() {
+  obj.request = function rutRequest() {
     return request(rut.app);
   };
-  utils.agent = function rutAgent() {
+  obj.agent = function rutAgent() {
     return request.agent(rut.app);
   };
-  utils.model = function rutModel(name) {
+  obj.model = function rutModel(name) {
     return rut.db.model(name);
   };
-  utils.rutUser = function rutUser(cb) {
+  obj.rutUser = function rutUser(cb) {
     return rut.db.model('User').findByUsername(results.rutUsername, cb);
   };
-  utils.testUser = function rutUser(name, password) {
+  obj.testUser = function rutUser(name, password) {
     if (arguments.length === 2) {
       password = 'insecure';
     }
@@ -73,18 +76,18 @@ function rutUtils(results) {
       });
     });
   }
-  utils.APIToken = function rutAPIToken(client, user, cb) {
+  obj.APIToken = function rutAPIToken(client, user, cb) {
     if (typeof client === 'string') {
       return rut.db.model('APIClient').findOne({name: client}, function (err, obj) {
         if (err) { return cb(err); }
-        utils.APIToken(obj, user, cb);
+        obj.APIToken(obj, user, cb);
       });
     }
 
     if (typeof user === 'string') {
       return rut.db.model('APIClient').findByUsername(user, function (err, obj) {
         if (err) { return cb(err); }
-        utils.APIToken(client, obj, cb);
+        obj.APIToken(client, obj, cb);
       });
     }
 
@@ -92,7 +95,7 @@ function rutUtils(results) {
     _rutAPIToken(client, user, cb);
   };
 
-  return utils;
+  return obj;
 }
 
 var db;

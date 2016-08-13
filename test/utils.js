@@ -4,6 +4,7 @@ var utils = {};
 var rut = require(__dirname + '/../index');
 var assign = require('lodash.assign');
 var async = require('async');
+var request = require('supertest');
 
 var defaultOptions = {
   dbWipe: true,
@@ -19,10 +20,84 @@ utils.options = function options(given) {
   return assign({}, defaultOptions, given || {});
 };
 
+utils.expect = require('expect.js');
+
+
+var _testUserCount = 0;
+function rutUtils(results) {
+  var utils = {};
+  var rut = results.rut;
+  utils.request = function rutRequest() {
+    return request(rut.app);
+  };
+  utils.agent = function rutAgent() {
+    return request.agent(rut.app);
+  };
+  utils.model = function rutModel(name) {
+    return rut.db.model(name);
+  };
+  utils.rutUser = function rutUser(cb) {
+    return rut.db.model('User').findByUsername(results.rutUsername, cb);
+  };
+  utils.testUser = function rutUser(name, password) {
+    if (arguments.length === 2) {
+      password = 'insecure';
+    }
+    if (arguments.length === 1) {
+      password = 'insecure';
+      _testUserCount++;
+      name = 'testUser' + _testUserCount;
+    }
+    var cb = arguments[arguments.length - 1];
+    return rut.db.model('User').register({
+      username: name
+    }, password, cb);
+  };
+
+  function _rutAPIToken(client, user, cb) {
+    var token = uid(256);
+    var tokenHash = crypto.createHash('sha1').update(token).digest('hex');
+    var expirationDate = new Date(new Date().getTime() + (1000 * 60));
+
+    db.model('AccessToken').create({
+      token: tokenHash,
+      expirationDate: expirationDate,
+      scope: '*',
+      user: user._id,
+      client: client._id
+    }, function(err) {
+      if (err) { return cb(err); }
+      cb(null, token, {
+        // hash: tokenHash,
+        expires_in: expirationDate.toISOString()
+      });
+    });
+  }
+  utils.APIToken = function rutAPIToken(client, user, cb) {
+    if (typeof client === 'string') {
+      return rut.db.model('APIClient').findOne({name: client}, function (err, obj) {
+        if (err) { return cb(err); }
+        utils.APIToken(obj, user, cb);
+      });
+    }
+
+    if (typeof user === 'string') {
+      return rut.db.model('APIClient').findByUsername(user, function (err, obj) {
+        if (err) { return cb(err); }
+        utils.APIToken(client, obj, cb);
+      });
+    }
+
+
+    _rutAPIToken(client, user, cb);
+  };
+
+  return utils;
+}
+
 var db;
 utils.cleanRut = function cleanRut(opts, done) {
   async.series({
-
     disconnectDb: function (cb) {
       if (!db || !db.disconnect) { return cb(); }
 
@@ -36,7 +111,11 @@ utils.cleanRut = function cleanRut(opts, done) {
     }
   }, function (err, results) {
     if (err) { return done(err); }
-    done(null, results.rut);
+    var rut = results.rut;
+
+    rut.testUtils = rutUtils(results);
+
+    done(null, rut);
   });
 };
 

@@ -1,9 +1,6 @@
 'use strict';
 var expect = require('expect.js');
-// var mongoose = require('mongoose');
-var request = require('supertest');
 var utils = require('./utils');
-var request = require('supertest');
 
 
 describe('rut server', function () {
@@ -60,17 +57,17 @@ describe('rut server', function () {
 
 
   describe('development environment', function () {
-    var app;
+    var request;
 
     before(function (done) {
       utils.cleanRut(utils.options(validTestYaml), function (err, result) {
-        app = result.app;
+        request = result.testUtils.request;
         done(err);
       });
     });
 
     it('serves a landing page', function (done) {
-      request(app)
+      request()
         .get('/')
         .set('Accept', 'text/html')
         .expect('Content-Type', /html/)
@@ -79,7 +76,7 @@ describe('rut server', function () {
   });
 
   describe('production environment', function () {
-    var app;
+    var request;
 
     before(function (done) {
       utils.cleanRut(utils.options({
@@ -87,13 +84,13 @@ describe('rut server', function () {
         apiDir: './test/test-services/',
         env: 'production'
       }), function (err, result) {
-        app = result.app;
+        request = result.testUtils.request;
         done(err);
       });
     });
 
     it('redirects index to /account', function (done) {
-      request(app)
+      request()
         .get('/')
         .set('Accept', 'text/html')
         .set('Location', '/account')

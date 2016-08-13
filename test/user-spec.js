@@ -34,18 +34,18 @@ describe('User model', function () {
     var rutUser;
 
     it('can be used to search for a single user', function (done) {
-      User.findByUsername('rut', function (err, user) {
+      User.findByUsername(setup.rutUsername, function (err, user) {
         rutUser = user;
         expect(user).not.to.be(null);
         expect(user).not.to.be(undefined);
-        expect(user.username).to.be('rut');
+        expect(user.username).to.be(setup.rutUsername);
         done(err);
       });
     });
 
     it('will pass an error at registration if already used', function (done) {
       User.register({
-        username: 'rut'
+        username: setup.rutUsername
       }, 'passwordpassword', function (err) {
         expect(err).not.to.be(null);
         expect(err).not.to.be(undefined);
@@ -55,7 +55,7 @@ describe('User model', function () {
 
     it('will pass an error at creation if already used', function (done) {
       User.create({
-        username: 'rut'
+        username: setup.rutUsername
       }, function (err) {
         expect(err).not.to.be(null);
         expect(err).not.to.be(undefined);

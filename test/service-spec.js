@@ -1,7 +1,6 @@
 'use strict';
 var expect = require('expect.js');
 var utils = require('./utils');
-var request = require('supertest');
 var serviceLib = require('./../lib/service');
 
 
@@ -90,7 +89,7 @@ describe('rut service', function () {
 
 
   describe('in all environements', function () {
-    var setup;
+    var setup, request;
 
     before(function (done) {
       utils.cleanRut(utils.options({
@@ -99,19 +98,20 @@ describe('rut service', function () {
         apiDir: './test/test-services/'
       }), function (err, result) {
         setup = result;
+        request = setup.testUtils.request;
         done(err);
       });
     });
 
     it('serves the definition as YAML', function (done) {
-      request(setup.app)
+      request()
         .get('/simple/v1.yaml')
         .expect(200)
         .expect('Content-Type', /yaml/, done);
     });
 
     it('serves the definition as JSON', function (done) {
-      request(setup.app)
+      request()
         .get('/simple/v1.json')
         .expect(200)
         .expect('Content-Type', /json/, done);
@@ -120,7 +120,7 @@ describe('rut service', function () {
 
 
   describe('development environement', function () {
-    var setup;
+    var setup, request;
 
     before(function (done) {
       utils.cleanRut(utils.options({
@@ -129,6 +129,7 @@ describe('rut service', function () {
         apiDir: './test/test-services/'
       }), function (err, result) {
         setup = result;
+        request = setup.testUtils.request;
         done(err);
       });
     });
@@ -136,7 +137,7 @@ describe('rut service', function () {
 
     describe('Documentation', function () {
       it('is served prefixed by /docs', function (done) {
-        request(setup.app)
+        request()
           .get('/docs/simple/v1/')
           .set('Accept', 'text/html')
           .expect('Content-Type', /html/)
@@ -147,7 +148,7 @@ describe('rut service', function () {
 
     describe('Editors', function () {
       it('is served prefixed by /editor', function (done) {
-        request(setup.app)
+        request()
           .get('/editor/simple/v1/')
           .set('Accept', 'text/html')
           .expect('Content-Type', /html/)

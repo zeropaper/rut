@@ -4,9 +4,9 @@
   "description": "A server based on swagger.io, express.js, passport.js, oauth2orize and mongoose.js.",
   "main": "index.js",
   "scripts": {
-    "dev-start": "nodemon -w lib/ -w server.js -w index.js server.js",
     "test": "mocha",
-    "test-dev-start": "nodemon -w test --exec \"./node_modules/.bin/mocha --bail\""
+    "dev-test": "nodemon -w test --exec \"./node_modules/.bin/mocha --bail\"",
+    "dev-serve": "nodemon -w lib/ -w server.js -w index.js server.js"
   },
   "keywords": [
     "swagger",

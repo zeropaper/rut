@@ -7,6 +7,7 @@ var assign = require('lodash.assign');
 var async = require('async');
 var request = require('supertest');
 var crypto = require('crypto');
+var debug = require('debug')('rut:testUtils');
 
 
 var defaultOptions = {
@@ -30,6 +31,8 @@ var _testUserCount = 0;
 function rutUtils(results) {
   var obj = {};
   var rut = results.rut;
+  obj.debug = require('debug');
+
   obj.request = function rutRequest() {
     return request(rut.app);
   };
@@ -77,17 +80,19 @@ function rutUtils(results) {
     });
   }
   obj.APIToken = function rutAPIToken(client, user, cb) {
+    debug('get API token for client (%s) and user (%s)', typeof client, typeof user);
+
     if (typeof client === 'string') {
-      return rut.db.model('APIClient').findOne({name: client}, function (err, obj) {
+      return rut.db.model('APIClient').findOne({name: client}, function (err, clientDoc) {
         if (err) { return cb(err); }
-        obj.APIToken(obj, user, cb);
+        obj.APIToken(clientDoc, user, cb);
       });
     }
 
     if (typeof user === 'string') {
-      return rut.db.model('APIClient').findByUsername(user, function (err, obj) {
+      return rut.db.model('APIClient').findByUsername(user, function (err, userDoc) {
         if (err) { return cb(err); }
-        obj.APIToken(client, obj, cb);
+        obj.APIToken(client, userDoc, cb);
       });
     }
 

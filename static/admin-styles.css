@@ -1,0 +1,22 @@
+#admin {
+  background-color: #000;
+  color: #aaa;
+}
+#admin ul {
+  max-width: 900px;
+  margin: 0 auto;
+  list-style: none;
+  padding: 0;
+}
+#admin ul > li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+#admin a {
+  color: #ddd;
+}
+#admin a:hover,
+#admin a:focus {
+  color: #fff;
+}

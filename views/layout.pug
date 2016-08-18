@@ -2,6 +2,8 @@ doctype html
 html
   head
     link(rel='stylesheet',href='/css/styles.css')
+    if admin
+      link(rel='stylesheet',href='/css/admin-styles.css')
   body
     header#page-header
       div
@@ -26,6 +28,8 @@ html
               ul
                 each msg in msgs
                   li #{msg}
+    if admin
+      include ./admin-menu.pug
     div#page-content
       block content
     footer#page-footer

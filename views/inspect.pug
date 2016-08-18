@@ -1,7 +1,6 @@
 extends layout
 block content
   if models
-    a.btn.import(href='/import') Import
     each count, name in models
       section(id=name)
         header

@@ -31,7 +31,7 @@ var _testUserCount = 0;
 function rutUtils(results) {
   var obj = {};
   var rut = results.rut;
-  obj.debug = require('debug');
+  obj.debug = require('debug')('rut:test:instance');
 
   obj.request = function rutRequest() {
     return request(rut.app);

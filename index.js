@@ -80,6 +80,7 @@ module.exports = function rutServer(options, initFinished) {
     port:               opt('port', '80'),
     protocol:           opt('protocol', 'https'),
     rutUsername:        rutUsername,
+    rutPassword:        rutPassword,
     schemes:            opt('schemes', ['https', 'http']),
     server:             server,
     serveStatic:        {},
@@ -324,26 +325,7 @@ module.exports = function rutServer(options, initFinished) {
   //
   //
   //
-  setupOperations.adminUser = function (setup, done) {
-    var User = setup.db.model('User');
-    done = addAndPassSetup('adminUser', setup, done);
-
-    debug('rut (admin) user');
-    User.findByUsername(rutUsername, function (err, user) {
-      if (!err && !user) {
-        debug('  does not exitst');
-        User.register({username: rutUsername}, rutPassword, done);
-      }
-      else if (user) {
-        debug('  exists');
-        user.setPassword(rutPassword, done);
-      }
-      else {
-        debug('  fail');
-        done(err);
-      }
-    });
-  };
+  setupOperations.rutUser = require('./lib/rut-user');
 
 
 

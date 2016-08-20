@@ -2,9 +2,8 @@
 var expect = require('expect.js');
 var utils = require('./utils');
 
-
 describe('User model', function () {
-  var setup = {}, User;
+  var setup = {}, User, debug;
 
   before(function (done) {
     this.timeout(2000);
@@ -17,7 +16,7 @@ describe('User model', function () {
     }), function (err, result) {
       setup = result;
       User = setup.db.model('User');
-
+      debug = setup.testUtils.debug;
       done(err);
     });
   });
@@ -30,15 +29,35 @@ describe('User model', function () {
     expect(User.schema.paths.someProperty).not.to.be(undefined);
   });
 
+  describe('rutUser', function () {
+    var verifUser;
+    before(function (done) {
+      User.findByUsername(setup.rutUsername, function (err, user) {
+        if (err) { return done(err); }
+        verifUser = user;
+        done();
+      });
+    });
+
+
+    it('is created or update at boot', function () {
+      expect(setup.rutUser).not.to.be(null);
+      expect(setup.rutUser).not.to.be(undefined);
+      expect(setup.rutUser.username).to.be(setup.rutUsername);
+    });
+
+    it('always sets the _id of rut user to "000000000000000000000000"', function () {
+      expect(setup.rutUser._id.toString()).to.be('000000000000000000000000');
+      expect(verifUser._id.toString()).to.be('000000000000000000000000');
+    });
+  });
+
   describe('username', function () {
     var rutUser;
 
-    it('can be used to search for a single user', function (done) {
+    before(function (done) {
       User.findByUsername(setup.rutUsername, function (err, user) {
         rutUser = user;
-        expect(user).not.to.be(null);
-        expect(user).not.to.be(undefined);
-        expect(user.username).to.be(setup.rutUsername);
         done(err);
       });
     });
@@ -75,6 +94,8 @@ describe('User model', function () {
     });
 
     it('can be changed only if the name is not already used', function (done) {
+      this.timeout(2000);
+
       User.register({
         username: 'samename'
       }, 'passwordpassword', function (err) {

@@ -20,3 +20,25 @@
 #admin a:focus {
   color: #fff;
 }
+
+/* -------------------------- */
+
+#documents {
+  border-collapse: collapse;
+  border: 1px solid #4e4949;
+  font-size: 0.8rem;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 100%;
+}
+#document thead {
+  text-align: center;
+}
+#documents th,
+#documents td {
+  padding: 3px 6px;
+  border: 1px solid #4e4949;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

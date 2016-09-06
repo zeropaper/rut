@@ -22,7 +22,7 @@ describe('rut service', function () {
 
     it('adds a swaggerFiles property to the setup object', function () {
       expect(setup.swaggerFiles).to.be.an('array');
-      expect(setup.swaggerFiles.length).to.be(1);
+      expect(setup.swaggerFiles.length).to.be(2);
     });
 
     describe('with invalid YAML', function () {
@@ -83,7 +83,7 @@ describe('rut service', function () {
     it('adds a some paths to the setup.serveStatic object', function () {
       expect(setup.serviceStatics).to.be(undefined);
       expect(setup.serveStatic).to.be.an('object');
-      expect(Object.keys(setup.serveStatic).length).to.be(1);
+      expect(Object.keys(setup.serveStatic).length).to.be(2);
     });
   });
 

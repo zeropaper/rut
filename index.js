@@ -447,6 +447,19 @@ module.exports = function rutServer(options, initFinished) {
 
 
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  setupOperations.sdk = require('./lib/sdk');
+
+
+
+
+
 
   //
   //

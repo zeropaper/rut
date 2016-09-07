@@ -1,0 +1,218 @@
+swagger: '2.0'
+info:
+  title: Rut Admin API
+  x-rut-frontend: http://localhost:9091/admin-1/
+  version: 1.0.0
+host: localhost:9090
+basePath: /admin/1
+produces:
+  - application/json
+consumes:
+  - application/json
+schemes:
+  - http
+  - https
+securityDefinitions:
+  implicitOauth2:
+    type: oauth2
+    scopes:
+      app: all access
+    flow: implicit
+    authorizationUrl: http://localhost:9090/authorization?client_id=admin1&response_type=token
+security:
+  - implicitOauth2:
+    - app
+paths:
+  '/script.js':
+    get:
+      produces:
+        - text/javascript
+      security: []
+      operationId: scripts
+      responses:
+        '200':
+          description: A JS file which can be used in the client.
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  '/model':
+    get:
+      operationId: modelList
+      description: List of models
+      parameters:
+        - name: count
+          in: query
+          type: integer
+          format: int32
+          description: The maximal number of records to be returned.
+          default: 10
+          maximum: 100
+
+        - name: skip
+          in: query
+          type: integer
+          format: int32
+          description: The number of records to be skipped
+          default: 0
+      responses:
+        '200':
+          description: A list of model descriptions
+          schema:
+            type: object
+            properties:
+              total:
+                type: number
+                format: int32
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Model'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  '/model/{model}':
+    get:
+      operationId: modelDescription
+      description: Model detailed description with statistics
+      parameters:
+        - name: model
+          in: path
+          description: The name of the model
+          required: true
+          type: string
+      responses:
+        '200':
+          description: A model description
+          schema:
+            type: object
+              # $ref: '#/definitions/Model'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  '/model/{model}/document':
+    get:
+      operationId: documentList
+      description: List of documents
+      parameters:
+        - name: model
+          in: path
+          description: The name of the model
+          required: true
+          type: string
+
+        - name: count
+          in: query
+          type: integer
+          format: int32
+          description: The maximal number of records to be returned.
+          default: 10
+          maximum: 100
+
+        - name: skip
+          in: query
+          type: integer
+          format: int32
+          description: The number of records to be skipped
+          default: 0
+
+        - name: since
+          in: query
+          type: string
+          format: date-time
+
+        - name: until
+          in: query
+          type: string
+          format: date-time
+
+        - name: sort
+          in: query
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: A list of documents
+          schema:
+            type: object
+            properties:
+              total:
+                type: number
+                format: int32
+              items:
+                type: array
+                items:
+                  $ref: '#/definitions/Document'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+    post:
+      operationId: documentCreation
+      description: Create a document of the given model
+      parameters:
+        - name: model
+          in: path
+          description: The name of the model
+          required: true
+          type: string
+
+        - name: document
+          in: body
+          # type: object
+          schema:
+            $ref: '#/definitions/Document'
+      responses:
+        '200':
+          description: The created document
+          schema:
+            $ref: '#/definitions/Document'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Model:
+    description: A model description
+    type: object
+    x-rut-id-field: name
+    properties:
+      name:
+        type: string
+      properties:
+        type: array
+        items:
+          type: 'string'
+      methods:
+        type: array
+        items:
+          type: 'string'
+      statics:
+        type: array
+        items:
+          type: 'string'
+  Document:
+    description: A model instance
+    type: object
+    x-rut-id-field: _id
+  Error:
+    description: Unexpected error
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        default: 500
+      message:
+        type: string
+        default: Internal Server Error
+      fields:
+        type: string

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rut Admin</title>
+  <script type="text/javascript">
+    'use strict';
+    var loc = window.location;
+    if (loc.protocol === 'http:' && loc.hostname !== 'localhost') {
+      loc.href = 'https:' + loc.href.slice(5);
+    }
+  </script>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+...
+<script type="text/javascript">
+'use strict';
+(function(){
+
+var env = location.host.indexOf(':') < 0 ? 'production' : 'development';
+
+var domain = env === 'development' ?
+              'http://'+ location.host.split(':').shift() +':9090/' :
+              'https://api-irata.rhcloud.com/';
+
+
+window.rutAdminInit = function (err, client) {
+  console.info('rutAdminInit', err, client);
+};
+
+var _collections = window.rutCollections = {};
+var _models = window.rutModels = {};
+
+function factoryState(model, name) {
+  var State = window.RutSDK.State;
+  var Collection = window.RutSDK.Collection;
+  var props = {};
+  var modelCollections = {};
+
+  Object.keys(model.properties || {}).forEach(function (key) {
+    var prop = model.properties[key];
+    var ampProp = {type: 'any'};
+    props[key] = ampProp;
+    // http://swagger.io/specification/ > Data Types
+    // to
+    // string, number, boolean, array, object, date, or any
+
+
+
+    if (prop.type === 'number' || prop.type === 'integer') {
+      ampProp.type = 'number';
+      if (typeof prop.default !== 'undefined') {
+        ampProp.default = prop.default;
+      }
+    }
+    else if (prop.type === 'boolean') {
+      ampProp.type = 'boolean';
+      if (typeof prop.default !== 'undefined') {
+        ampProp.default = prop.default;
+      }
+    }
+    else if (prop.type === 'array') {
+      ampProp.type = 'array';
+      if (typeof prop.default !== 'undefined') {
+        ampProp.default = prop.default;
+      }
+
+      if (prop.items && prop.items.$ref) {
+        ampProp = false;
+
+        var collectionModelName = prop.items.$ref.split('/').pop();
+
+        modelCollections[key] = _collections[collectionModelName] || Collection.extend({
+          model: _models[collectionModelName] || Collection.extend({})
+        });
+        console.info('array', key, collectionModelName, modelCollections[key]);
+      }
+    }
+    else if (prop.type === 'string') {
+      if (prop.format === 'date' || prop.format === 'date-time') {
+        ampProp.type = 'date';
+      }
+      else {
+        ampProp.type = 'string';
+      }
+
+      if (typeof prop.default !== 'undefined') {
+        ampProp.default = prop.default;
+      }
+    }
+    else {
+      console.info('unsolved type', prop.type);
+    }
+
+    if (ampProp) {
+      props[key] = ampProp;
+    }
+  });
+
+  var ModelState = _models[name] = _models[name] || State.extend({
+    props: props,
+    collections: modelCollections
+  });
+  return ModelState;
+}
+
+function factoryCollection(model, name) {
+  var Collection = window.RutSDK.Collection;
+  var ModelCollection = _collections[name] = _collections[name] || Collection.extend({
+    model: factoryState(model, name)
+  });
+  return ModelCollection;
+}
+
+window.rutFactory = function (client) {
+  console.info('rutFactory', client, window.RutSDK);
+  Object.keys(client.definitions).forEach(function (name) {
+    var model = client.definitions[name];
+    factoryCollection(model, name);
+  });
+};
+
+
+var el = document.createElement('script');
+el.setAttribute('defer', 'true');
+el.onload = function() {
+  console.info('wuhu... script loaded', window.RutAdmin);
+};
+document.body.appendChild(el);
+var src = domain + 'sdk/admin1.js';
+console.info(src);
+el.src = src;
+
+})();
+</script>
+</body>
+</html>

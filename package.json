@@ -51,7 +51,7 @@
     "pug": "2.0.0-beta3",
     "serve-favicon": "2.3.0",
     "serve-static": "1.10.3",
-    "swagger-client": "2.1.18",
+    "swagger-client": "2.1.20",
     "swagger-tools": "0.9.9",
     "yaml-js": "0.1.3"
   },

@@ -34,7 +34,7 @@
     "express-session": "1.13.0",
     "express-validator": "2.20.7",
     "formidable": "1.0.17",
-    "glob": "6.0.4",
+    "glob": "7.1.0",
     "joi": "8.4.2",
     "lodash.assign": "4.0.9",
     "lodash.camelcase": "4.1.1",

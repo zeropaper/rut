@@ -48,7 +48,7 @@ module.exports = function rutServer(options, initFinished) {
   var rutUsername = opt('rutUsername', 'rut');
 
   var mongoose = options.mongoose || require('mongoose');
-  mongoose.Promise = require('q').Promise;
+  mongoose.Promise = Promise;
   var Schema = mongoose.Schema;
 
 

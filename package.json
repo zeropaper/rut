@@ -39,7 +39,7 @@
     "express-validator": "2.20.8",
     "formidable": "1.0.17",
     "glob": "7.0.6",
-    "joi": "9.0.4",
+    "joi": "10.0.4",
     "lodash.assign": "4.2.0",
     "lodash.camelcase": "4.3.0",
     "lodash.template": "4.4.0",

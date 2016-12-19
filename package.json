@@ -36,7 +36,7 @@
     "debug": "2.2.0",
     "express": "4.14.0",
     "express-session": "1.14.1",
-    "express-validator": "2.20.8",
+    "express-validator": "3.1.1",
     "formidable": "1.0.17",
     "glob": "7.0.6",
     "joi": "9.0.4",

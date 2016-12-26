@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "expect.js": "0.3.1",
-    "mocha": "3.0.2",
+    "mocha": "3.1.1",
     "supertest": "2.0.0",
     "swagger-editor": "2.10.3"
   }

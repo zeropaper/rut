@@ -26,7 +26,7 @@
     "ampersand-collection": "1.6.1",
     "ampersand-state": "5.0.1",
     "async": "2.0.1",
-    "bcrypt": "0.8.7",
+    "bcrypt": "1.0.2",
     "big-collection": "github:zeropaper/big-collection#master",
     "body-parser": "1.15.2",
     "browserify": "13.1.0",

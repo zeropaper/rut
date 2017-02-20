@@ -43,7 +43,7 @@
     "lodash.assign": "4.2.0",
     "lodash.camelcase": "4.3.0",
     "lodash.template": "4.4.0",
-    "mongoose": "4.6.0",
+    "mongoose": "4.8.4",
     "oauth2orize": "1.6.0",
     "passport": "0.3.2",
     "passport-facebook": "2.1.1",

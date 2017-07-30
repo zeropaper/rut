@@ -1,0 +1,23 @@
+include ../includes/form-field.pug
+h2(class='mdc-typography--display1')='Form'
+div
+  for field in fields
+    div
+      +renderField(field)
+  div
+    button(type='submit',class='mdc-button mdc-button--accent',data-mdc-auto-init='MDCRipple')='Register'
+
+
+h2(class='mdc-typography--display1')='Typography'
+div
+  div(class='mdc-typography--display4')='display4'
+  div(class='mdc-typography--display3')='display3'
+  div(class='mdc-typography--display2')='display2'
+  div(class='mdc-typography--display1')='display1'
+  div(class='mdc-typography--headline')='headline'
+  div(class='mdc-typography--title')='title'
+  div(class='mdc-typography--subheading2')='subheading2'
+  div(class='mdc-typography--subheading1')='subheading1'
+  div(class='mdc-typography--body2')='body2'
+  div(class='mdc-typography--body1')='body1'
+  div(class='mdc-typography--caption')='caption'

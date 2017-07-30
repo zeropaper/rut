@@ -1,0 +1,10 @@
+//- pre=schema.toString()
+
+include ../includes/form-field.pug
+
+if formFields
+  form(action='/' + modelRoute + '/' + instance.id + '/edit',method='post')
+    each field in formFields
+      +renderField(field, instance)
+
+    button(type='submit',class='mdc-button mdc-button--accent',data-mdc-auto-init='MDCRipple')='Save ' + modelName

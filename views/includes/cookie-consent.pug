@@ -1,0 +1,22 @@
+unless user
+  link(rel='stylesheet',type='text/css',href='//cookiescriptcdn.pro/libs/cookieconsent.6.min.css')
+  a(id='cookieconsent:learn_more',aria-label='learn more about cookies',role='button',tabindex='0',class='cc-link',href='https://cookie-policy.org/',target='_blank')='Learn more'
+  script.
+    var cookieconsent_ts = 1501128230013; var learnmore2 = document.getElementById('cookieconsent:learn_more');learnmore2.setAttribute('style', 'display:none');
+  script(src='//cookiescriptcdn.pro/libs/cookieconsent.6.min.js')
+  script.
+    window.addEventListener('load', function(){
+    window.cookieconsent.initialise({
+      'palette': {
+        'popup': {
+          'background': '#fff'
+        },
+        'button': {
+          'background': '#3fa535'
+        }
+      },
+      'theme': 'edgeless',
+      'position': 'bottom-right'
+    })});
+  noscript
+    a(href='https://cookiescript.info/')='Cookie consent script'

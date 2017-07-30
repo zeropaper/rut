@@ -1,0 +1,11 @@
+ul
+  for viewedUser in documents
+    li
+      a(href='/user/' + viewedUser.id)=viewedUser.username
+
+      if userHasRole('admin')
+        div(class='x-button-list')
+          a(class='x-button-list-item',href='/user/' + viewedUser.id + '')='Edit'
+          if viewedUser.id !== user.id
+            form(class='x-button-list-item',method='post',action='/user/' + viewedUser.id + '/delete')
+              button(type='submit')='Delete'

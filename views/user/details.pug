@@ -1,0 +1,85 @@
+include ../includes/form-field.pug
+div(class='mdc-layout-grid')
+  div(class='mdc-layout-grid__inner')
+    div(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-6')
+      h2(class='mdc-typography--subheading1')='Member Since'
+      time(class='moment',datetime=userParam.createdAt)=moment(userParam.createdAt).format('YYYY-MM-DD')
+      h2(class='mdc-typography--subheading1')='Roles'
+      ul(class='mdc-list mdc-list--dense')
+        for role in userParam.roles
+          li(class='mdc-list-item')=role
+    form(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-6',method='post',action='/user/' + userParam.id + '/password')
+      div
+        +renderField({
+          required: true,
+          type: 'password',
+          name: 'password',
+          label: 'New Password'
+        })
+      div
+        +renderField({
+          required: true,
+          type: 'password',
+          name: 'confirmation',
+          label: 'Confirm',
+          helpText: 'Enter the password again'
+        })
+      button(class='mdc-button',type='submit')='Change Password'
+
+if userParam.accounts.length
+  div(class='mdc-layout-grid')
+    div(class='mdc-layout-grid__inner')
+      for provider, providerId in authProviders
+        - var providerAccount = userParam.accounts.find(a => a.provider === providerId)
+        if providerAccount
+          div(class='mdc-card mdc-layout-grid__cell--span-6')
+            section(class='mdc-card__media')
+              h1(class='mdc-card__title mdc-card__title--large')=provider.name
+                if providerId === 'github'
+                  -
+                    var profile = providerAccount.profile;
+                  h2(class='mdc-card__subtitle mdc-card__title--large')
+                    a(href=profile.profileUrl)=profile.username
+
+            div(class='mdc-layout-grid')
+              div(class='mdc-layout-grid__inner')
+                if providerId === 'github'
+                  -
+                    var profile = providerAccount.profile;
+                    var json = profile._json;
+                  //- pre(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-6')=JSON.stringify(providerAccount, null, 2)
+                  div(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-6')
+                    ul(class='mdc-list mdc-list--two-line mdc-list--dense')
+                      li(class='mdc-list-item')
+                        span(class='mdc-list-item__text')=json.location
+                          span(class='mdc-list-item__text__secondary')='Citizen'
+                      li(class='mdc-list-item')
+                        span(class='mdc-list-item__text')=json.public_repos
+                          span(class='mdc-list-item__text__secondary')='Public Reposiotries'
+                      li(class='mdc-list-item')
+                        span(class='mdc-list-item__text')=json.public_gists
+                          span(class='mdc-list-item__text__secondary')='Public Gists'
+                      li(class='mdc-list-item')
+                        span(class='mdc-list-item__text')=json.followers
+                          span(class='mdc-list-item__text__secondary')='Followers'
+                  div(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-6')
+                    h1(class='mdc-typography--headline')='Bio'
+                    div(class='x-gh-bio mdc-typography--body1')=json.bio
+                    //- a(target='_blank',class='mdc-button',href=profile.profileUrl)=profile.username + ' on ' + provider.name
+
+
+//- ---------------------------------------------------------------------------
+if user.roles.indexOf('admin') > -1
+  div(class='mdc-layout-grid')
+    div(class='mdc-layout-grid__inner')
+      div(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-4')
+        form(method='post',action='/user/' + userParam.id + '/edit')
+          +renderField({
+            label: 'Roles',
+            name: 'roles',
+            value: userParam.roles.join(' '),
+            helpText: 'Separate multiple role with space'
+          })
+
+          button(class='mdc-button',type='submit')='Save Roles'
+      //- pre(class='mdc-layout-grid__cell mdc-layout-grid__cell--span-12')=JSON.stringify(userParam, null, 2)

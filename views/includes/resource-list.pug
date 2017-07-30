@@ -1,0 +1,10 @@
+if resources && resources.length
+  h2(class='mdc-typography--subheading2')='Resources'
+  ul
+    for resource in resources
+      if resource
+        li
+          div(class='mdc-typography--subheading1')
+            a(href=resource.url,target='_blank')=resource.url
+          if resource.notes
+            div(class='mdc-typography--body1')=resource.notes

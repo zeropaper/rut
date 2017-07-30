@@ -1,0 +1,7 @@
+section(class='x-auth-provider-links mdc-elevation--z3')
+  header
+    h1(class='mdc-typography--subheading2 mdc-typography--adjust-margin')='Authenticate with'
+  ul(class='mdc-list')
+    for provider, id in authProviders
+      li(class='mdc-list-item')
+        a(class='mdc-button',data-mdc-auto-init='MDCRipple',href=(provider.authPath || '/auth/' + id))=provider.name

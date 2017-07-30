@@ -1,0 +1,99 @@
+mixin renderField(field, data)
+  -
+    var _f = clone(field);
+    var type = _f.type || 'text';
+    var id = 'field-'+ (_f.name || '') + '-' + randomString();
+    var value = _f.value || (data && _f.path ? atPath(data, _f.path) : null);
+
+  if type === 'hidden'
+    input(name=_f.name,value=value,type=type)
+  else if type === 'fieldset' && _f.fields
+    fieldset(class='x-form-group')
+      if _f.label
+        legend=_f.label
+      div(class='x-form-group__fields')
+        for subfield in _f.fields
+          +renderField(subfield)
+      if _f.helpText
+        div(class='x-form-group--helptext')=_f.helpText
+
+  else if type === 'divider'
+    hr(class='x-form-divider' + (_f.classes ? ' ' + _f.classes : ''))
+
+  else if type === 'formtext'
+    div(class='x-form-formtext' + (_f.classes ? ' ' + _f.classes : ''))
+      if _f.label
+        label(class='mdc-typography--title')=_f.label
+      div(class='mdc-typography--body1')=value
+
+  else if type === 'checkbox' || type === 'radio'
+    div(class='mdc-form-field' + (_f.classes ? ' ' + _f.classes : ''))
+      div(class='mdc-' + type)
+        input(name=_f.name,
+              placeholder=_f.placeholder,
+              type=type,
+              id=id,
+              class='mdc-' + type + '__native-control',
+              checked=_f.checked,
+              required=!!_f.required,
+              disabled=!!_f.disabled,
+              readonly=!!_f.readonly,
+              value=value)
+
+        if type === 'checkbox'
+          div(class='mdc-checkbox__background').
+            <svg class='mdc-checkbox__checkmark' viewBox='0 0 24 24'>
+              <path class='mdc-checkbox__checkmark__path' fill='none' stroke='white' d='M1.73,12.91 8.1,19.28 22.79,4.59'></path>
+            </svg>
+            <div class='mdc-checkbox__mixedmark'></div>
+
+        else
+          div(class='mdc-radio__background')
+            div(class='mdc-radio__outer-circle')
+              div(class='mdc-radio__inner-circle')
+
+      if _f.label
+        label(for=id)=_f.label
+
+  else
+    -
+      var className = 'mdc-textfield';
+      className += type === 'textarea' ? ' mdc-textfield--multiline' : '';
+      className += _f.fullwidth ? ' mdc-textfield--fullwidth' : '';
+      className += _f.dense ? ' mdc-textfield--dense' : '';
+      className += _f.classes ? ' ' + _f.classes : '';
+      var placeholder = _f.fullwidth ? _f.placeholder || _f.label : _f.placeholder;
+
+    div(class=className,data-mdc-auto-init='MDCTextfield')
+      if type === 'textarea'
+        textarea(name=_f.name,
+                  placeholder=placeholder,
+                  class='mdc-textfield__input',
+                  id=id,
+                  aria-controls=id + '-helptext',
+                  required=!!_f.required,
+                  disabled=!!_f.disabled,
+                  readonly=!!_f.readonly,
+                  rows=_f.rows || 8,
+                  cols=_f.cols || 40)=value
+      else
+        input(name=_f.name,
+              placeholder=placeholder,
+              class='mdc-textfield__input',
+              id=id,
+              aria-controls=id + '-helptext',
+              required=!!_f.required,
+              disabled=!!_f.disabled,
+              readonly=!!_f.readonly,
+              pattern=_f.pattern,
+              value=value,
+              type=type)
+
+      if _f.label && !_f.fullwidth
+        label(for=id,class='mdc-textfield__label')=_f.label
+
+  if _f.helpText
+    p(id=id + '-helptext',class='mdc-textfield-helptext',aria-hidden='true')=_f.helpText
+
+
+

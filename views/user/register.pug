@@ -1,0 +1,69 @@
+include ../includes/form-field.pug
+
+form(action='/register',method='post')
+  +renderField({
+    fullwidth: true,
+    helpText: false,
+    label: 'Username',
+    name: 'username',
+    required: true,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: false,
+    label: 'Email',
+    type: 'email',
+    name: 'email',
+    required: true,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: 'Must match the email field',
+    label: 'Email Confirmation',
+    type: 'email',
+    name: 'email-confirm',
+    required: true,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: false,
+    label: 'Password',
+    type: 'password',
+    name: 'password',
+    required: true,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: 'Must match the password field',
+    label: 'Password Confirmation',
+    type: 'password',
+    name: 'password-confirm',
+    required: true,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: 'Tell us a bit about you',
+    label: 'About me',
+    type: 'textarea',
+    name: 'about',
+    required: false,
+  })
+
+  +renderField({
+    fullwidth: true,
+    helpText: false,
+    label: 'I agree with the terms of use (TODO)',
+    type: 'checkbox',
+    name: 'tos',
+    disabled: true,
+    required: true,// sry guys...
+  })
+
+  button(type='submit',class='mdc-button mdc-button--accent',data-mdc-auto-init='MDCRipple')='Register'
+
+include ../includes/auth-provider-links.pug

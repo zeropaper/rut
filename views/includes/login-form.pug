@@ -1,0 +1,21 @@
+include form-field.pug
+
+form(action='/login',method='post')
+  +renderField({
+    helpText: false,
+    label: 'Username',
+    name: 'username',
+    required: true
+  })
+
+  +renderField({
+    helpText: false,
+    label: 'Password',
+    name: 'password',
+    type: 'password',
+    required: true
+  })
+
+  button(type='submit',class='mdc-button mdc-button--accent',data-mdc-auto-init='MDCRipple')='Login'
+
+include auth-provider-links.pug

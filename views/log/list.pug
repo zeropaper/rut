@@ -1,0 +1,10 @@
+each doc in documents
+  div(class='row columns')
+    div
+    details
+      summary
+        span=doc.code
+        .
+          &nbsp;
+        time(datetime=doc.createdAt)=doc.createdAt
+      pre=doc.info

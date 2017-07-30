@@ -1,0 +1,13 @@
+div(class='rows')
+  div(class='row rows')
+    div(class='row columns')
+      each property in properties
+        div(class='column name ' + property)= property
+  div(class='row rows')
+    each doc in documents
+      div(class='row columns')
+        each property in properties
+          if property === '_id'
+            a(href='/' + modelRoute + '/' + doc.id)=doc.id
+          else
+            div(class='column ' + property)=doc[property]

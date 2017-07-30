@@ -1,0 +1,84 @@
+/*
+:root {
+  --mdc-theme-primary: #3fa535;
+  --mdc-theme-accent: #a52657;
+}
+*/
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+
+
+.x-markdown h1,
+.x-markdown h2,
+.x-markdown h3,
+.x-markdown h4,
+.x-markdown h5,
+.x-markdown h6 {
+  font-weight: 300;
+}
+
+
+.mdc-toolbar__title a {
+  color: var(--mdc-theme-text-primary-on-primary, white);
+  text-decoration: none;
+}
+
+main.mdc-toolbar-fixed-adjust:before {
+  content:'';
+  overflow: hidden;
+  display: block;
+}
+
+.x-auth-provider-links {
+  margin: 1em 2em;
+  padding: 1em;
+  overflow: hidden;
+}
+
+.x-form-divider {
+  border: 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.24);
+  /*border-bottom: 1px dashed rgba(0, 0, 0, 0.12);*/
+}
+
+.x-form-formtext {
+  /*margin-top: ;*/
+  /*margin-bottom: ;*/
+}
+.x-form-formtext + .mdc-textfield,
+.x-form-formtext + .mdc-form-field {
+  margin-top: 20px;
+}
+
+
+
+.x-form-group {
+  border: 1px solid rgba(0, 0, 0, 0.24);
+}
+.x-form-group > legend {
+  /*border: 1px solid rgba(0, 0, 0, 0.24);*/
+}
+

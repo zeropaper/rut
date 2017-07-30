@@ -1,0 +1,8 @@
+include ../includes/form-field.pug
+
+form(method='post')
+  for field in fields
+    +renderField(field)
+
+  div
+    button(class='mdc-button',type='submit')='Test'

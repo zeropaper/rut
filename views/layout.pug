@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    title=title
+
+    link(href='https://fonts.googleapis.com/css?family=Roboto+Mono',rel='stylesheet')
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons',rel='stylesheet')
+    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500',rel='stylesheet')
+    link(href='/mdc.css',rel='stylesheet')
+    link(href='/hljs.css',rel='stylesheet')
+
+    link(href='/style.css',rel='stylesheet')
+  body(class='mdc-typography')
+    header(class='mdc-toolbar mdc-toolbar--fixed')
+      div(class='mdc-toolbar__row')
+        section(class='mdc-toolbar__section mdc-toolbar__section--align-start')
+          button(id='mdc-temporary-drawer-toggle',class='demo-menu material-icons mdc-toolbar__icon--menu')='menu'
+          span(class='mdc-toolbar__title')
+            a(href='/')=siteName
+            //- span=' | '
+            //- span(class='dev-page-title')=pageTitle
+        section(class='mdc-toolbar__section mdc-toolbar__section--align-end',role='toolbar')
+          if user
+            a(href='/logout',class='material-icons mdc-toolbar__icon',aria-label='Logout',alt='Logout')='exit_to_app'
+
+    include includes/drawer.pug
+
+
+    main(role='main',class='mdc-toolbar-fixed-adjust')
+      section
+        if pageTitle
+          header
+            h1(class='mdc-typography--headline')=pageTitle
+            if pageSubTitle
+              h2(class='mdc-typography--subheading2')=pageSubTitle
+      .
+        !{body}
+
+    include includes/dialogs.pug
+
+    include includes/messages.pug
+
+    script(src='/mdc.js')
+    script(src='/hljs.js')
+    script(src='/scripts.js')
+
+    include includes/cookie-consent.pug

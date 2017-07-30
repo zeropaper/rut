@@ -1,0 +1,3 @@
+h1(class='mdc-typography--display1')=(code ? code + ' ' : '') + error.message
+unless productionMode
+  pre(class='mdc-elevation--z3')=error.stack

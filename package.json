@@ -1,6 +1,6 @@
 {
-  "name": "devugees-curriculum-server",
-  "version": "1.0.1",
+  "name": "rut",
+  "version": "2.0.0-beta",
   "description": "Server for the Devugees Curriculum",
   "private": true,
   "main": "index.js",

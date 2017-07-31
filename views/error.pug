@@ -1,3 +1,5 @@
 h1(class='mdc-typography--display1')=(code ? code + ' ' : '') + error.message
 unless productionMode
-  pre(class='mdc-elevation--z3')=error.stack
+  div(class='mdc-elevation--z3 mdc-layout-grid')
+    div(class='mdc-layout-grid__inner')
+      pre(class='mdc-layout-grid__cell--span-12')=error.stack

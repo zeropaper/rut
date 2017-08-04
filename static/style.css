@@ -29,7 +29,10 @@
   font-feature-settings: 'liga';
 }
 
-
+body {
+  margin: 0;
+  overflow: hidden;
+}
 
 .x-markdown h1,
 .x-markdown h2,
@@ -45,13 +48,23 @@
   color: var(--mdc-theme-text-primary-on-primary, white);
   text-decoration: none;
 }
-
+#main-wrapper {
+  overflow: auto;
+  max-height: calc(100vh - 64px);
+  padding: 0 8px;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+}
+#main-wrapper > *:last-child {
+  margin-bottom: 32px;
+}
+/*
 main.mdc-toolbar-fixed-adjust:before {
   content:'';
   overflow: hidden;
   display: block;
 }
-
+*/
 .x-auth-provider-links {
   margin: 1em 2em;
   padding: 1em;

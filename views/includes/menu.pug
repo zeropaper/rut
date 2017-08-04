@@ -1,0 +1,7 @@
+mixin renderMenuItem(item, path)
+  li
+    a(href='/' + path)=item.title
+    if item.children
+      ul
+        for child, subPath in item.children
+          +renderMenuItem(child, path + '/' + subPath)

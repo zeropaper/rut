@@ -23,7 +23,11 @@ const bodyParser            = require('body-parser'),
       setupPassport         = require('./lib/passport-integration');
 
 
-
+function menuHandler() {
+  return function menuMiddleware(req, res, next) {
+    next();
+  };
+}
 
 function loadModels(db, plugins) {
   require('./models/user')(db, mongoose.Schema);
@@ -63,9 +67,12 @@ function setupErrorHandling(app, db) {
 module.exports = function butRut(setup) {
   const MongoStore            = require('connect-mongo')(session),
         app                   = express(),
-        plugins               = setup.plugins || [],
+        plugins               = setup.plugins ||
+                                [],
         server                = http.createServer(app),
         sessionSecret         = setup.sessionSecret,
+        basePath              = setup.basePath ||
+                                '/',
         dataPath              = setup.dataDir,
         tmpPath               = setup.tmpDir,
         staticPath            = setup.staticDir,
@@ -139,7 +146,6 @@ module.exports = function butRut(setup) {
 
     copyViews(function(err) {
       if (err) throw err;
-
       loadModels(db, plugins);
 
       app.use(function(req, res, next){
@@ -193,6 +199,7 @@ module.exports = function butRut(setup) {
         })
       }));
 
+      app.use(menuHandler());
       app.use(connectFlash());
       app.use(function(req, res, next) {
         var render = res.render;

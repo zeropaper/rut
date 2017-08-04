@@ -25,16 +25,24 @@ html
 
     include includes/drawer.pug
 
+    div(id='main-wrapper',class='mdc-toolbar-fixed-adjust')
+      main(role='main')
+        section
+          if pageTitle
+            header
+              h1(class='mdc-typography--headline')=pageTitle
+              if pageSubTitle
+                h2(class='mdc-typography--subheading2')=pageSubTitle
+        .
+          !{body}
 
-    main(role='main',class='mdc-toolbar-fixed-adjust')
-      section
-        if pageTitle
-          header
-            h1(class='mdc-typography--headline')=pageTitle
-            if pageSubTitle
-              h2(class='mdc-typography--subheading2')=pageSubTitle
-      .
-        !{body}
+      if menu
+        include includes/menu.pug
+        aside(id='site-navigation')
+          nav
+            ul
+              for item, path in menu()
+                +renderMenuItem(item, path)
 
     include includes/dialogs.pug
 

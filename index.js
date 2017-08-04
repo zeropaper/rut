@@ -73,6 +73,8 @@ module.exports = function butRut(setup) {
         server                = http.createServer(app),
         io                    = socketIo(server),
         sessionSecret         = setup.sessionSecret,
+        sessionCookieName     = setup.sessionCookieName ||
+                                'rut.sid',
         basePath              = setup.basePath ||
                                 '/',
         dataPath              = setup.dataDir,
@@ -200,6 +202,7 @@ module.exports = function butRut(setup) {
       app.use(bodyParser.json());
       app.use(methodOverride());
       app.use(session({
+        name: sessionCookieName,
         secret: sessionSecret,
         resave: false,
         saveUninitialized: false,

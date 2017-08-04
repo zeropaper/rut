@@ -79,7 +79,8 @@ module.exports = function butRut(setup) {
         webAddress            = setup.webAddress,
         mongoDBURL            = setup.mongoDBURL,
         rutViewsPath          = path.join(__dirname, 'views'),
-        tmpViewsPath          = (rutViewsPath === viewsPath ? viewsPath : tmpPath + '/rutViews');
+        tmpViewsPath          = (rutViewsPath === viewsPath ? viewsPath : tmpPath + '/rutViews'),
+        appBootTime           = Date.now();
 
   setup.rutViewsPath = rutViewsPath;
   setup.tmpViewsPath = tmpViewsPath;
@@ -131,7 +132,7 @@ module.exports = function butRut(setup) {
 
       server.listen(webPort, webAddress, function (err) {
         if (err) throw err;
-        console.log(`Application worker ${process.pid} started...`);
+        console.log(`Application worker ${process.pid} started in ${(Date.now() - appBootTime)}ms`);
       });
     }
 
@@ -141,6 +142,10 @@ module.exports = function butRut(setup) {
 
       loadModels(db, plugins);
 
+      app.use(function(req, res, next){
+        res.locals.requestProcessTime = Date.now();
+        next();
+      });
       app.use(helmet());
 
       app.set('view engine', 'pug');
@@ -199,6 +204,7 @@ module.exports = function butRut(setup) {
             msgs[type].forEach(msg => res.locals.messages[type].push(msg));
           });
           res.locals.user = req.user;
+          res.locals.requestProcessTime = Date.now() - res.locals.requestProcessTime;
           render(...args);
         };
         next();

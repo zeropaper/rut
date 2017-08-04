@@ -28,7 +28,11 @@ messageTypes.forEach(function(type, t) {
     }
   });
 });
-
+var socket = io.connect(location.protocol + '//' + location.host);
+socket.on('news', function (data) {
+  console.log(data);
+  socket.emit('my other event', { my: 'data' });
+});
 // let dialog = mdc.dialog.MDCDialog(document.querySelector('#dialog'));
 // dialog.listen('MDCDialog:accept', function() {
 //   console.log('accepted');

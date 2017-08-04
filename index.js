@@ -14,6 +14,7 @@ const bodyParser            = require('body-parser'),
       partials              = require('express-partials'),
       path                  = require('path'),
       session               = require('express-session'),
+      socketIo              = require('socket.io'),
       atPath                = require('./lib/at-path'),
       ensureAdminUser       = require('./lib/ensure-admin-user'),
       randomString          = require('./lib/random-string'),
@@ -70,6 +71,7 @@ module.exports = function butRut(setup) {
         plugins               = setup.plugins ||
                                 [],
         server                = http.createServer(app),
+        io                    = socketIo(server),
         sessionSecret         = setup.sessionSecret,
         basePath              = setup.basePath ||
                                 '/',
@@ -117,6 +119,13 @@ module.exports = function butRut(setup) {
 
       setupPassport(app, db, setup);
 
+      io.on('connection', function (socket) {
+        socket.emit('news', { hello: 'world' });
+        socket.on('my other event', function (data) {
+          console.log(data);
+        });
+      });
+
       Object.keys(db.models).forEach(function(modelName) {
         var Model = db.model(modelName);
         [
@@ -124,7 +133,7 @@ module.exports = function butRut(setup) {
         ].forEach(function(methodName) {
           var method = Model[methodName];
           if (typeof method === 'function') {
-            method(app);
+            method(app, io);
           }
         });
       });

@@ -35,6 +35,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local-mongoose": "^4.0.0",
-    "pug": "^2.0.0-rc.2"
+    "pug": "^2.0.0-rc.2",
+    "socket.io": "^2.0.3"
   }
 }

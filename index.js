@@ -3,6 +3,7 @@
 const bodyParser            = require('body-parser'),
       clone                 = require('lodash.clone'),
       connectFlash          = require('connect-flash'),
+      compression           = require('compression'),
       express               = require('express'),
       fs                    = require('fs-extra'),
       helmet                = require('helmet'),
@@ -145,6 +146,8 @@ module.exports = function butRut(setup) {
       app.use(partials());
 
       app.use(express.static(staticPath));
+      app.use(compression());
+
       var rutStaticPath = path.resolve('static');
       if (staticPath !== rutStaticPath) {
         app.use(express.static(rutStaticPath));

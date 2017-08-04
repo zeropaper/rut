@@ -1,7 +1,7 @@
 {
   "name": "rut",
   "version": "2.0.0-beta-1",
-  "description": "Server for the Devugees Curriculum",
+  "description": "A really useful tool to bootstrap a node, mongoose, express and passport project.",
   "private": true,
   "main": "index.js",
   "scripts": {

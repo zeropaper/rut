@@ -72,6 +72,8 @@ module.exports = function butRut(setup) {
         viewsPath             = setup.viewsDir,
         adminPassword         = setup.adminPassword ||
                                 'R34lly1ns3cur3!!!',
+        staticMaxAge          = setup.staticMaxAge ||
+                                '0s',
         production            = setup.production,
         webPort               = setup.webPort,
         webAddress            = setup.webAddress,
@@ -145,21 +147,26 @@ module.exports = function butRut(setup) {
       app.set('views', tmpViewsPath);
       app.use(partials());
 
-      app.use(express.static(staticPath));
       app.use(compression());
 
+      function serveStatic(path) {
+        return express.static(path, {
+          maxAge: staticMaxAge
+        });
+      }
+      app.use(serveStatic(staticPath));
       var rutStaticPath = path.resolve('static');
       if (staticPath !== rutStaticPath) {
-        app.use(express.static(rutStaticPath));
+        app.use(serveStatic(rutStaticPath));
       }
 
       const mdcPath = path.join(path.dirname(require.resolve('material-components-web')), 'dist');
-      app.use('/mdc.css', express.static(path.join(mdcPath, 'material-components-web.css')));
-      app.use('/mdc.js', express.static(path.join(mdcPath, 'material-components-web.js')));
+      app.use('/mdc.css', serveStatic(path.join(mdcPath, 'material-components-web.css')));
+      app.use('/mdc.js', serveStatic(path.join(mdcPath, 'material-components-web.js')));
 
       const hljsPath = path.dirname(path.dirname(require.resolve('highlight.js')));
-      app.use('/hljs.css', express.static(path.join(hljsPath, 'styles', 'default.css')));
-      app.use('/hljs.js', express.static(path.join(hljsPath, 'lib', 'highlight.js')));
+      app.use('/hljs.css', serveStatic(path.join(hljsPath, 'styles', 'default.css')));
+      app.use('/hljs.js', serveStatic(path.join(hljsPath, 'lib', 'highlight.js')));
 
 
       app.locals.atPath = atPath;

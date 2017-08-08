@@ -21,7 +21,8 @@ const bodyParser            = require('body-parser'),
       setupDev              = require('./lib/setup-dev'),
       setupMDContent        = require('./lib/setup-markdown-content'),
       setupModelGenerics    = require('./lib/setup-model-generics'),
-      setupPassport         = require('./lib/passport-integration');
+      setupPassport         = require('./lib/passport-integration'),
+      markdownRenderer      = require('./lib/markdown-renderer');
 
 
 function menuHandler() {
@@ -194,6 +195,9 @@ module.exports = function butRut(setup) {
       app.locals.atPath = atPath;
       app.locals.clone = clone;
       app.locals.moment = moment;
+      app.locals.markdownRenderer = function(input) {
+        return markdownRenderer.render(input);
+      };
       app.locals.productionMode = production;
       app.locals.randomString = randomString;
       app.locals.siteName = app.locals.title = setup.title || 'RUT';

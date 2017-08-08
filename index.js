@@ -25,8 +25,25 @@ const bodyParser            = require('body-parser'),
       markdownRenderer      = require('./lib/markdown-renderer');
 
 
-function menuHandler() {
+function menuHandler(contentPath) {
+  var menu;
+  try {
+    menu = require(path.join(contentPath, 'menu'));
+  }
+  catch(_){}
+
+  function menuMaker(cache) {
+    return function(newItems = false, clear = false) {
+      if (newItems) cache = clear ? clone(newItems) : merge(cache, newItems);
+      return cache;
+    };
+  }
+
   return function menuMiddleware(req, res, next) {
+    var tabs = {};
+    res.locals.tabs = menuMaker(tabs);
+
+    res.locals.menu = menuMaker(menu);
     next();
   };
 }
@@ -145,7 +162,13 @@ module.exports = function butRut(setup) {
 
       setupModelGenerics(app, db);
 
-      setupMDContent(app, dataPath);
+      app.get('/toc', function(req, res) {
+        res.render('toc', {
+          pageTitle: 'Table Of Contents'
+        });
+      });
+
+      setupMDContent(app, contentPath);
 
       setupErrorHandling(app, db);
 
@@ -215,7 +238,7 @@ module.exports = function butRut(setup) {
         })
       }));
 
-      app.use(menuHandler());
+      app.use(menuHandler(contentPath));
       app.use(connectFlash());
       app.use(function(req, res, next) {
         var render = res.render;

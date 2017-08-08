@@ -1,7 +1,20 @@
+-
+  function checkVisibleChildren(menuItem = {}) {
+    var found = Object.keys(menuItem.children || {}).filter(path => {
+      var child = menuItem.children[path];
+      return !child.nolink || checkVisibleChildren(child);
+    }).length;
+    return found > 0;
+  }
+
 mixin renderMenuItem(item, path)
+  - var hasVisibleChildren = checkVisibleChildren(item);
   li
-    a(href='/' + path)=item.title
-    if item.children
+    if !item.nolink
+      a(href='/' + path)=item.title
+    else
+      span=item.title
+    if hasVisibleChildren && item.children
       ul
         for child, subPath in item.children
           +renderMenuItem(child, path + '/' + subPath)

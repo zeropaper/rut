@@ -1,35 +1,10 @@
+- var menuItems = typeof menu === 'function' ? menu() : {};
 aside(class='mdc-temporary-drawer',data-mdc-auto-init='MDCTemporaryDrawer')
   nav(class='mdc-temporary-drawer__drawer')
     header(class='mdc-temporary-drawer__header')
       div(class='mdc-temporary-drawer__header-content mdc-theme--primary-bg mdc-theme--text-primary-on-primary')= siteName
     nav(class='mdc-temporary-drawer__content mdc-list-group')
-      if user
+      if Object.keys(menuItems).length
         div(class='mdc-list')
-          a(class='mdc-list-item',href='/account',data-mdc-tabindex-handled='true',tabindex='-1')
-            i(class='material-icons mdc-list-item__start-detail',aria-hidden='true')='face'
-            .
-              Your account (#{user.username})
-
-        div(class='mdc-list')
-          a(class='mdc-list-item',href='/logout',data-mdc-tabindex-handled='true',tabindex='-1')='Logout'
-
-        hr(class='mdc-list-divider')
-
-      else
-        div(class='mdc-list')
-          a(class='mdc-list-item',href='/login',data-mdc-tabindex-handled='true',tabindex='-1')
-            i(class='material-icons mdc-list-item__start-detail',aria-hidden='true')='face'
-            .
-              Login
-          a(class='mdc-list-item',href='/register',data-mdc-tabindex-handled='true',tabindex='-1')
-            i(class='material-icons mdc-list-item__start-detail',aria-hidden='true')='face'
-            .
-              Register
-
-
-
-      if !productionMode
-        hr(class='mdc-list-divider')
-
-        div(class='mdc-list')
-          a(class='mdc-list-item',href='/kitchen-sink',data-mdc-tabindex-handled='true',tabindex='-1')='Kitchen Sink'
+          for item, path in menuItems
+            a(class='mdc-list-item',href=path,data-mdc-tabindex-handled='true',tabindex='-1')=item.title

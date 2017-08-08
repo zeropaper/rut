@@ -1,17 +1,22 @@
-'use strict'
+'use strict';
 /*jshint node:true*/
 
 var menu = module.exports = {
-  'path-name': {
-    title: 'Path Name',
+  'getting-started': {
+    title: 'Guetting Started'
+  },
+  'extending': {
+    title: 'Extending',
     children: {
-      'sub-path': {
-        title: 'Sub Path'
+      'db': {
+        title: 'Database Model'
       },
-      'sub-path-too': {
-        title: 'Sub Path too'
+      'routing': {
+        title: 'Routing'
+      },
+      'views': {
+        title: 'Views and Rendering'
       }
     }
-  },
-
+  }
 };

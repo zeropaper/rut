@@ -1,0 +1,6 @@
+include includes/menu.pug
+if typeof menu === 'function'
+nav
+  ul
+    for menuItem, path in menu()
+      +renderMenuItem(menuItem, path)

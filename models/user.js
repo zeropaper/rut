@@ -31,6 +31,7 @@ module.exports = function(db, Schema) {
     // email: {type: String, required: true, unique: true},
     username: {type: String, required: true, unique: true},
     accounts: [accountSchema],
+    lastSeen: Date,
     roles: [String]
   }, {
     timestamps: {}
@@ -201,6 +202,16 @@ module.exports = function(db, Schema) {
 
   userSchema.static('labelFor', function(name) {
     return name;
+  });
+
+  userSchema.method('seen', function(done) {
+    var user = this;
+    done = done || function(){};
+    var diff = Date.now() - user.lastSeen.getTime() < 60 * 1000;
+    debug(`seen ${user.username} (${diff}), ${Date.now()} ${user.lastSeen.getTime()}`);
+    if (diff) return done(null, user);
+    user.lastSeen = new Date();
+    user.save(done);
   });
 
   userSchema.plugin(passportLocalMongoose);

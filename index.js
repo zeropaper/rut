@@ -255,7 +255,12 @@ module.exports = function butRut(setup) {
 
       app.use(menuHandler(contentPath));
       app.use(connectFlash());
+      // override the render function for
+      // - mark a user as seen if applicable
+      // - ensure flash messages are rendered
+      // - update the requestProcessTime
       app.use(function(req, res, next) {
+        if (req.user) req.user.seen();
         var render = res.render;
         res.render = function(...args) {
           res.locals.messages = res.locals.messages || {};

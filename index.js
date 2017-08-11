@@ -1,6 +1,7 @@
 'use strict';
 /*jshint node: true*/
 const bodyParser            = require('body-parser'),
+      debug                 = require('debug')('rut'),
       clone                 = require('lodash.clone'),
       connectFlash          = require('connect-flash'),
       compression           = require('compression'),
@@ -68,6 +69,7 @@ function setupErrorHandling(app, db) {
   });
 
   app.use(function(err, req, res, next) {
+    debug('error handler: ' + err.message);
     if (res.statusCode < 400) res.status(500);
 
     Log.logError(err, req);
@@ -84,6 +86,7 @@ function setupErrorHandling(app, db) {
 
 
 module.exports = function butRut(setup) {
+  debug(`Setup ${(setup.plugins || []).length} plugin(s)`);
   const MongoStore            = require('connect-mongo')(session),
         app                   = express(),
         plugins               = setup.plugins ||
@@ -153,6 +156,7 @@ module.exports = function butRut(setup) {
         ].forEach(function(methodName) {
           var method = Model[methodName];
           if (typeof method === 'function') {
+            debug(`model plugin ${modelName}.${methodName}(app, io)`);
             method(app, io);
           }
         });

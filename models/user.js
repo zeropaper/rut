@@ -2,6 +2,7 @@
 /*jshint node: true*/
 const passportLocalMongoose = require('passport-local-mongoose'),
       mongooseUnique        = require('mongoose-unique-validator'),
+      debug                 = require('debug')('rut:user'),
       findOneArray          = require('./../lib/find-one-array'),
       redirectDestination   = require('./../lib/redirect-destination'),
       ensureAuthenticated   = require('./../lib/ensure-authenticated');

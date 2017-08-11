@@ -4,6 +4,7 @@ const bodyParser            = require('body-parser'),
       glob                  = require('glob'),
       debug                 = require('debug')('rut'),
       clone                 = require('lodash.clone'),
+      merge                 = require('lodash.merge'),
       connectFlash          = require('connect-flash'),
       compression           = require('compression'),
       express               = require('express'),
@@ -121,6 +122,8 @@ module.exports = function butRut(setup) {
         basePath              = setup.basePath ||
                                 '/',
         dataPath              = setup.dataDir,
+        contentPath           = setup.contentDir ||
+                                dataPath,
         tmpPath               = setup.tmpDir,
         staticPath            = setup.staticDir,
         viewsPath             = setup.viewsDir,
@@ -132,6 +135,7 @@ module.exports = function butRut(setup) {
         webPort               = setup.webPort,
         webAddress            = setup.webAddress,
         mongoDBURL            = setup.mongoDBURL,
+        rutStaticPath         = path.join(__dirname, 'static'),
         rutViewsPath          = path.join(__dirname, 'views'),
         tmpViewsPath          = (rutViewsPath === viewsPath ? viewsPath : tmpPath + '/rutViews'),
         appBootTime           = Date.now();
@@ -177,6 +181,8 @@ module.exports = function butRut(setup) {
       });
     });
   }
+
+
 
   mongoose.Promise = global.Promise;
 
@@ -232,11 +238,27 @@ module.exports = function butRut(setup) {
     }
 
 
+    function importDB(next) {
+      var async = require('async');
+      var cbs = [];
+      Object.keys(db.models).forEach(function(modelName) {
+        var Model = db.model(modelName);
+        if (typeof Model.importDB === 'function') {
+          debug(`importing ${modelName}`);
+          cbs.push(function(cb) {
+            Model.importDB(cb);
+          });
+        }
+      });
+      async.series(cbs, next);
+    }
+
+
     copyViews(function(err) {
       if (err) throw err;
-      loadModels(db, plugins);
 
       app.use(function(req, res, next){
+        console.info('............................................', req);
         res.locals.requestProcessTime = Date.now();
         next();
       });
@@ -254,7 +276,6 @@ module.exports = function butRut(setup) {
         });
       }
       app.use(serveStatic(staticPath));
-      var rutStaticPath = path.resolve('static');
       if (staticPath !== rutStaticPath) {
         app.use(serveStatic(rutStaticPath));
       }
@@ -268,6 +289,7 @@ module.exports = function butRut(setup) {
       app.use('/hljs.js', serveStatic(path.join(hljsPath, 'lib', 'highlight.js')));
 
 
+      app.locals.basePath = basePath;
       app.locals.atPath = atPath;
       app.locals.clone = clone;
       app.locals.moment = moment;
@@ -343,7 +365,10 @@ module.exports = function butRut(setup) {
         next();
       });
 
-      ensureAdminUser(db, adminPassword, setupRut);
+      importDB(function(err) {
+        if (err) throw err;
+        ensureAdminUser(db, adminPassword, setupRut);
+      });
     });
   }).catch(function(err) {
     console.error('Mongoose connection errror', err.stack);

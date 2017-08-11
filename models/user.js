@@ -133,7 +133,7 @@ module.exports = function(db, Schema) {
       });
     });
 
-    app.get('/account', function(req, res){
+    app.get('/account', ensureAuthenticated, function(req, res){
       res.render('user/details', {
         user: req.user,
         userParam: req.user,

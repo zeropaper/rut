@@ -49,14 +49,24 @@ function menuHandler(contentPath) {
   };
 }
 
+
+const _rutPlugins = [];
 function loadModels(db, plugins) {
-  require('./models/user')(db, mongoose.Schema);
-  require('./models/log')(db, mongoose.Schema);
+  var args = [db, mongoose.Schema];
+  _rutPlugins.push(require('./models/user')(...args));
+  _rutPlugins.push(require('./models/log')(...args));
   plugins.forEach(function(plugin) {
     var fn = typeof plugin === 'string' ? require(plugin) : plugin;
-    fn(db, mongoose.Schema);
+    _rutPlugins.push(fn(...args));
   });
 }
+
+function execPlugins(functionName, ...args) {
+  return _rutPlugins
+    .filter(plugin => plugin && typeof plugin[functionName] === 'function')
+    .map(plugin => plugin[functionName](...args));
+}
+
 
 
 
@@ -152,7 +162,7 @@ module.exports = function butRut(setup) {
       Object.keys(db.models).forEach(function(modelName) {
         var Model = db.model(modelName);
         [
-          'registerRutPlugin'
+          'registerRoutes'
         ].forEach(function(methodName) {
           var method = Model[methodName];
           if (typeof method === 'function') {
@@ -161,6 +171,7 @@ module.exports = function butRut(setup) {
           }
         });
       });
+      execPlugins('router', app, io);
 
       setupDev(app, db);
 

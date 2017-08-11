@@ -43,7 +43,7 @@ module.exports = function(db, Schema) {
       this.name.last = displayName.substr(displayName.indexOf(' ') + 1).trim();
     });
 
-  userSchema.static('registerRutPlugin', function(app) {
+  userSchema.static('registerRoutes', function(app) {
     const User = this;
 
     app.use(function(req, res, next) {

@@ -17,11 +17,24 @@ html
           button(id='mdc-temporary-drawer-toggle',class='demo-menu material-icons mdc-toolbar__icon--menu')='menu'
           span(class='mdc-toolbar__title')
             a(href='/')=siteName
-            //- span=' | '
-            //- span(class='dev-page-title')=pageTitle
+
+          //- div(class='mdc-menu-anchor')
+            button(class='mdc-button mdc-button--raised mdc-button--primary site-menu-toggle')='Menu'
+            div(class='mdc-simple-menu',tabindex='-1',id='site-menu')
+              ul(class='mdc-simple-menu__items mdc-list',role='menu',aria-hidden='true')
+                li(class='mdc-list-item',role='menuitem',tabindex='0')='Back'
+                //- li(class='mdc-list-divider' role='separator')
+
         section(class='mdc-toolbar__section mdc-toolbar__section--align-end',role='toolbar')
-          //- if user
-            a(href='/logout',class='material-icons mdc-toolbar__icon',aria-label='Logout',alt='Logout')='exit_to_app'
+          ul(class='x-toolbar__user-links')
+            if user
+              li
+                a(href='/account',aria-label='Account',alt='Your Account')=user.username
+              li
+                a(href='/logout',aria-label='Logout',alt='Logout')='Logout'
+            else
+              li
+                a(href='/login',aria-label='Login',alt='Login')='Login'
 
     include includes/drawer.pug
 
@@ -36,7 +49,7 @@ html
         .
           !{body}
 
-      if menu
+      //- if menu
         include includes/menu.pug
         aside(id='site-navigation')
           nav

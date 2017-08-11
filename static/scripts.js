@@ -28,10 +28,27 @@ messageTypes.forEach(function(type, t) {
     }
   });
 });
+
+const socketEvents = [
+  'connect',
+  'connect_error',
+  'connect_timeout',
+  'error',
+  'disconnect',
+  'reconnect',
+  'reconnect_attempt',
+  'reconnecting',
+  'reconnect_error',
+  'reconnect_failed',
+  'ping',
+  'pong'
+];
+
 var socket = io.connect(location.protocol + '//' + location.host);
-socket.on('news', function (data) {
-  console.log(data);
-  socket.emit('my other event', { my: 'data' });
+socketEvents.forEach(eventName => {
+  socket.on(eventName, function(...data){
+    console.log('-- socket: %s', eventName, ...data);
+  });
 });
 // let dialog = mdc.dialog.MDCDialog(document.querySelector('#dialog'));
 // dialog.listen('MDCDialog:accept', function() {
@@ -50,6 +67,14 @@ socket.on('news', function (data) {
 // document.querySelector('#dialog-with-list-activation').addEventListener('click', function (evt) {
 //   dialogScrollable.lastFocusedTarget = evt.target;
 //   dialogScrollable.show();
+// });
+
+
+// var menuEl = document.querySelector('#site-menu');
+// var menu = new mdc.menu.MDCSimpleMenu(menuEl);
+// var toggle = document.querySelector('.site-menu-toggle');
+// toggle.addEventListener('click', function() {
+//   menu.open = !menu.open;
 // });
 
 })(this);

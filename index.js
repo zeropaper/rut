@@ -94,6 +94,17 @@ function setupErrorHandling(app, db) {
 }
 
 
+function socketSessionId(socket, sessionCookieName) {
+  var cookies = {};
+  socket.handshake.headers.cookie
+    .split('; ')
+    .forEach(kv => {
+      kv = kv.split('=');
+      cookies[kv[0]] = decodeURIComponent(kv[1]);
+    });
+  return ((cookies[sessionCookieName] || '').split(/:|\./) || [])[1] || false;
+}
+
 
 module.exports = function butRut(setup) {
   debug(`Setup ${(setup.plugins || []).length} plugin(s)`);
@@ -147,17 +158,19 @@ module.exports = function butRut(setup) {
   mongoose.createConnection(mongoDBURL, {
     useMongoClient: true
   }).then(function(db) {
+    const sessionStore = new MongoStore({
+      mongooseConnection: db
+    });
+
+    loadModels(db, plugins);
+    const User = db.model('User');
+
+
+
     function setupRut(err) {
       if (err) throw err;
 
       setupPassport(app, db, setup);
-
-      io.on('connection', function (socket) {
-        socket.emit('news', { hello: 'world' });
-        socket.on('my other event', function (data) {
-          console.log(data);
-        });
-      });
 
       Object.keys(db.models).forEach(function(modelName) {
         var Model = db.model(modelName);
@@ -248,10 +261,39 @@ module.exports = function butRut(setup) {
         secret: sessionSecret,
         resave: false,
         saveUninitialized: false,
-        store: new MongoStore({
-          mongooseConnection: db
-        })
+        store: sessionStore
       }));
+
+
+      function socketGetSession(socket, sessionId, next) {
+        sessionStore.get(sessionId, function (err, ioSession) {
+          if (!ioSession || !ioSession.passport || !ioSession.passport.user) return;
+          User.findByUsername(ioSession.passport.user, function(err, user) {
+            socket.user = user;
+            next(err, socket);
+          });
+        });
+      }
+
+      io.on('connection', function(socket) {
+        var sessionId = socketSessionId(socket, sessionCookieName);
+        if (!sessionId) return;
+        socketGetSession(socket, sessionId, function() {
+          socket.on('appstatus', function(data, next) {
+            return next({
+              upSince: appBootTime
+            });
+          });
+          // if (!socket.user) return;
+          // socket.broadcast.emit('userconnect', {
+          //   username: socket.user.username
+          // });
+
+          // socket.emit('userwelcome', {
+          //   message: 'Hello ' + socket.user.username
+          // });
+        });
+      });
 
       app.use(menuHandler(contentPath));
       app.use(connectFlash());

@@ -36,11 +36,12 @@ module.exports = function(db, Schema) {
     timestamps: {}
   });
 
-  userSchema.virtual('displayName').
-    get(function() { return this.name.first + ' ' + this.name.last; }).
-    set(function(displayName) {
-      this.name.first = displayName.substr(0, displayName.indexOf(' ')).trim();
-      this.name.last = displayName.substr(displayName.indexOf(' ') + 1).trim();
+  userSchema.virtual('displayName')
+    .get(function() { return this.name.first + ' ' + this.name.last; })
+    .set(function(displayName) {
+      var spaceIndex = displayName.indexOf(' ');
+      this.name.first = displayName.substr(0, spaceIndex).trim();
+      this.name.last = displayName.substr(spaceIndex + 1).trim();
     });
 
   userSchema.static('registerRoutes', function(app) {

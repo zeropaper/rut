@@ -1,6 +1,7 @@
 'use strict';
 /*jshint node: true*/
 const bodyParser            = require('body-parser'),
+      glob                  = require('glob'),
       debug                 = require('debug')('rut'),
       clone                 = require('lodash.clone'),
       connectFlash          = require('connect-flash'),
@@ -138,19 +139,43 @@ module.exports = function butRut(setup) {
   setup.rutViewsPath = rutViewsPath;
   setup.tmpViewsPath = tmpViewsPath;
 
+
+
+  const _watchedViews = {};
+  function watchView(filename) {
+    if (filename && _watchedViews[filename]) return;
+    _watchedViews[filename] = fs.watch(filename, (eventType) => {
+      debug(`views ${eventType} on ${filename}`);
+      copyViews(watchViews);
+    });
+  }
+
+  function watchViews() {
+    watchView(viewsPath);
+
+    glob(viewsPath + '/**/*', function(err, filenames) {
+      if(err) throw err;
+
+      filenames.forEach(function(filename) {
+        watchView(filename);
+      });
+    });
+  }
+
+  if (tmpViewsPath !== rutViewsPath && !production) {
+    watchViews();
+  }
+
   function copyViews(next) {
     if (tmpViewsPath === rutViewsPath) return next();
-    fs.emptyDir(tmpViewsPath)
-      .then(() => {
-        fs.copy(rutViewsPath, tmpViewsPath)
-          .then(() => {
-            fs.copy(viewsPath, tmpViewsPath)
-              .then(next)
-              .catch(next);
-          })
-          .catch(next);
-      })
-      .catch(next);
+    debug(`views copy ${rutViewsPath} and ${viewsPath} to ${tmpViewsPath}`);
+    fs.emptyDir(tmpViewsPath, (err) => {
+      if (err) return next(err);
+      fs.copy(rutViewsPath, tmpViewsPath, (err) => {
+        if (err) return next(err);
+        fs.copy(viewsPath, tmpViewsPath, next);
+      });
+    });
   }
 
   mongoose.Promise = global.Promise;

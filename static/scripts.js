@@ -29,25 +29,11 @@ messageTypes.forEach(function(type, t) {
   });
 });
 
-const socketEvents = [
-  'connect',
-  'connect_error',
-  'connect_timeout',
-  'error',
-  'disconnect',
-  'reconnect',
-  'reconnect_attempt',
-  'reconnecting',
-  'reconnect_error',
-  'reconnect_failed',
-  'ping',
-  'pong'
-];
-
 var socket = io.connect(location.protocol + '//' + location.host);
-socketEvents.forEach(eventName => {
-  socket.on(eventName, function(...data){
-    console.log('-- socket: %s', eventName, ...data);
+var upSince = Date.now();
+socket.on('reconnect', function() {
+  socket.emit('appstatus', {}, function(data) {
+    if (data.upSince > upSince) location.reload();
   });
 });
 // let dialog = mdc.dialog.MDCDialog(document.querySelector('#dialog'));

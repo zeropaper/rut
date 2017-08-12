@@ -3,7 +3,7 @@
 
 var menu = module.exports = {
   'getting-started': {
-    title: 'Guetting Started'
+    title: 'Getting Started'
   },
   'extending': {
     title: 'Extending',

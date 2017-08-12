@@ -7,4 +7,4 @@ aside(class='mdc-temporary-drawer',data-mdc-auto-init='MDCTemporaryDrawer')
       if Object.keys(menuItems).length
         div(class='mdc-list')
           for item, path in menuItems
-            a(class='mdc-list-item',href=path,data-mdc-tabindex-handled='true',tabindex='-1')=item.title
+            a(class='mdc-list-item',href='/' + path,data-mdc-tabindex-handled='true',tabindex='-1')=item.title

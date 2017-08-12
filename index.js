@@ -140,6 +140,7 @@ module.exports = function butRut(setup) {
         tmpViewsPath          = (rutViewsPath === viewsPath ? viewsPath : tmpPath + '/rutViews'),
         appBootTime           = Date.now();
 
+  app._upSince = appBootTime;
   setup.rutViewsPath = rutViewsPath;
   setup.tmpViewsPath = tmpViewsPath;
 
@@ -258,7 +259,6 @@ module.exports = function butRut(setup) {
       if (err) throw err;
 
       app.use(function(req, res, next){
-        console.info('............................................', req);
         res.locals.requestProcessTime = Date.now();
         next();
       });
@@ -351,6 +351,17 @@ module.exports = function butRut(setup) {
       app.use(function(req, res, next) {
         if (req.user) req.user.seen();
         var render = res.render;
+        var send = res.send.bind(res);
+        var requestProcessTime = res.locals.requestProcessTime;
+
+        res.send = function(body) {
+          if (typeof body === 'string') {
+            body = body
+                    .split('data-processing-time')
+                    .join('data-rendering-time="' + (Date.now() - requestProcessTime) + '" data-processing-time');
+          }
+          send(body);
+        };
         res.render = function(...args) {
           res.locals.messages = res.locals.messages || {};
           var msgs = req.flash();
@@ -359,7 +370,7 @@ module.exports = function butRut(setup) {
             msgs[type].forEach(msg => res.locals.messages[type].push(msg));
           });
           res.locals.user = req.user;
-          res.locals.requestProcessTime = Date.now() - res.locals.requestProcessTime;
+          res.locals.requestProcessTime = Date.now() - requestProcessTime;
           render(...args);
         };
         next();

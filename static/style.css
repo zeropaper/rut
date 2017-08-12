@@ -5,18 +5,6 @@
 }
 */
 
-a {
-  color: var(--mdc-theme-primary, #3fa535);
-  text-decoration: none;
-  text-shadow: 0.03em 0 #fff, -0.03em 0 #fff, 0 0.03em #fff, 0 -0.03em #fff, 0.06em 0 #fff, -0.06em 0 #fff, 0.09em 0 #fff, -0.09em 0 #fff, 0.12em 0 #fff, -0.12em 0 #fff, 0.15em 0 #fff, -0.15em 0 #fff;
-  background-image: linear-gradient(#fff, #fff),
-                    linear-gradient(#fff, #fff),
-                    linear-gradient(var(--mdc-theme-primary, #3fa535),
-                    var(--mdc-theme-primary, #3fa535));
-  background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-  background-repeat: no-repeat, no-repeat, repeat-x;
-  background-position: 0% 19%, 100% 100%, 0% 94%;
-}
 
 
 .material-icons {
@@ -45,6 +33,27 @@ a {
 }
 
 
+main a,
+main a:link,
+main a:visited {
+  color: var(--mdc-theme-primary, #3fa535);
+  text-decoration: none;
+  text-shadow: -2px 0 1px #fff,
+               2px 0 1px #fff,
+               -2px 0 0 #fff,
+               2px 0 0 #fff,
+               -1px 0 1px #fff,
+               1px 0 1px #fff,
+               -1px 0 0 #fff,
+               1px 0 0 #fff;
+  box-shadow: 0 0 0 0 #fff inset,
+              0 0 0 0 #fff inset;
+  transition: box-shadow 0.218s ease;
+}
+main a:hover {
+  box-shadow: 0 -2px 0 0 #fff inset,
+              0 -3px 0 0 currentColor inset;
+}
 
 .x-markdown h1,
 .x-markdown h2,

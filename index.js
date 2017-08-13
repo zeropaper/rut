@@ -61,7 +61,7 @@ module.exports = function rutServer(options, initFinished) {
 
   var server = options.server = http.createServer(app);
 
-  var db = mongoose.createConnection();
+  var db;
 
 
 
@@ -125,13 +125,8 @@ module.exports = function rutServer(options, initFinished) {
   //
   //
   setupOperations.db = function (setup, done) {
-    setup.db.open(options.mongodbURL, function (err) {
-      if (err) {
-        console.warn('mongodb connection "%s" could not be open\n %s', options.mongodbURL, err.stack);
-        return done(err);
-      }
-      done(null, setup);
-    });
+    db = setup.db = mongoose.createConnection(options.mongodbURL);
+    done(null, setup);
   };
 
 

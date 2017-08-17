@@ -41,7 +41,7 @@
     "express-validator": "2.20.8",
     "formidable": "1.0.17",
     "glob": "7.0.6",
-    "joi": "10.1.0",
+    "joi": "10.3.0",
     "lodash.assign": "4.2.0",
     "lodash.camelcase": "4.3.0",
     "lodash.template": "4.4.0",

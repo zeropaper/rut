@@ -6,7 +6,7 @@ describe('User model', function () {
   var setup = {}, User, debug;
 
   before(function (done) {
-    this.timeout(2000);
+    this.timeout(4000);
     utils.cleanRut(utils.options({
       serviceYamlPattern: 'simple/*.yaml',
       apiDir: './test/test-services/',
@@ -46,7 +46,7 @@ describe('User model', function () {
       expect(setup.rutUser.username).to.be(setup.rutUsername);
     });
 
-    xit('always sets the _id of rut user to "000000000000000000000000"', function () {
+    it('always sets the _id of rut user to "000000000000000000000000"', function () {
       expect(setup.rutUser._id.toString()).to.be('000000000000000000000000');
       expect(verifUser._id.toString()).to.be('000000000000000000000000');
     });

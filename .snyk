@@ -6,3 +6,6 @@ patch:
   'npm:ms:20170412':
     - swagger-tools > body-parser > debug > ms:
         patched: '2017-08-17T10:24:37.465Z'
+  'npm:qs:20170213':
+    - swagger-tools > body-parser > qs:
+        patched: '2017-08-18T07:34:09.678Z'

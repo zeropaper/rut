@@ -8,7 +8,8 @@
     "dev-test": "nodemon -w test --exec \"./node_modules/.bin/mocha --bail\"",
     "dev-serve": "nodemon -e yaml,js -w lib/ -w admin/1.yaml -w admin/1/*.js -w server.js -w index.js server.js",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "swagger",
@@ -61,7 +62,7 @@
     "swagger-client": "2.1.20",
     "swagger-tools": "wickedest/swagger-tools#master",
     "yaml-js": "0.1.3",
-    "snyk": "^1.38.2"
+    "snyk": "^1.38.3"
   },
   "devDependencies": {
     "expect.js": "0.3.1",

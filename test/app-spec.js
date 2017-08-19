@@ -82,7 +82,8 @@ describe('rut server', function () {
       utils.cleanRut(utils.options({
         serviceYamlPattern: '{simple,implicit}/*.yaml',
         apiDir: './test/test-services/',
-        env: 'production'
+        env: 'production',
+        rutPassword: 'atleasttwelvecharachterslong'
       }), function (err, result) {
         request = result.testUtils.request;
         done(err);

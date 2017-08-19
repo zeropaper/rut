@@ -13,6 +13,8 @@ var passport = require('passport');
 
 var passportLocalMongoose = require('passport-local-mongoose');
 
+var mongooseUnique = require('mongoose-unique-validator');
+
 var addAndPassSetup = require('./lib/add-and-pass-setup');
 
 var rutUi = require('./lib/rut-ui');
@@ -241,15 +243,64 @@ module.exports = function rutServer(options, initFinished) {
   //
   setupOperations.coreDbSchemes = function (setup, done) {
     debug('setup.userSchemaDef', setup.userSchemaDef);
-    var userSchema = new Schema(assign({}, setup.userSchemaDef, {}), {
+
+    var accountSchema = new Schema({
+      provider: {type: String, required: true},
+      providerUserId: {type: String, required: true},
+      auth: {type: Schema.Types.Mixed, required: true},
+      profile: {type: Schema.Types.Mixed, required: true}
+    });
+
+    var userSchema = new Schema(assign({
+      name: {
+        first: {type: String, default: 'Anon'},
+        last: {type: String, default: 'Ymous'}
+      },
+      // email: {type: String, required: true, unique: true},
+      username: {type: String, required: true, unique: true},
+      accounts: [accountSchema],
+      lastSeen: Date,
+      roles: [String]
+    }, setup.userSchemaDef, {}), {
       timestamps: {}
     });
 
+    userSchema.virtual('displayName')
+      .get(function() { return this.name.first + ' ' + this.name.last; })
+      .set(function(displayName) {
+        var spaceIndex = displayName.indexOf(' ');
+        this.name.first = displayName.substr(0, spaceIndex).trim();
+        this.name.last = displayName.substr(spaceIndex + 1).trim();
+      });
+
     userSchema.plugin(passportLocalMongoose, {
       passwordValidator: function(password, cb) {
-        cb(password.length > 9 || password === 'insecure' ? null : 'Password must be at least 9 charachters long');
+        var err = password.length > 12 ||
+                  (setup.env !== 'production' && password === 'insecure') ?
+                  null :
+                  new Error('Password must be at least 12 charachters long');
+        cb(err);
       }
     });
+
+    userSchema.method('seen', function(done) {
+      var user = this;
+      done = done || function(){};
+      var diff = Date.now() - user.lastSeen.getTime() < 60 * 1000;
+      debug(`seen ${user.username} (${diff}), ${Date.now()} ${user.lastSeen.getTime()}`);
+      if (diff) return done(null, user);
+      user.lastSeen = new Date();
+      user.save(done);
+    });
+
+    userSchema.static('findOneByProvider', function(provider, id, next) {
+      return this.findOne({
+        'accounts.provider': provider,
+        'accounts.providerUserId': id
+      }, next);
+    });
+
+    userSchema.plugin(mongooseUnique);
 
     var User = setup.db.model('User', userSchema);
     setup.passport.use(User.createStrategy());

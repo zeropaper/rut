@@ -57,10 +57,11 @@
     "passport-local": "1.0.0",
     "passport-local-mongoose": "4.0.0",
     "passport-oauth2-client-password": "0.1.2",
-    "pug": "2.0.0-beta6",
+    "pug": "^2.0.0-rc.2",
     "serve-favicon": "2.4.3",
     "serve-static": "1.12.3",
     "snyk": "^1.38.3",
+    "socket.io": "^2.0.3",
     "swagger-client": "^2.2.21",
     "swagger-tools": "wickedest/swagger-tools#master",
     "yaml-js": "0.1.3"

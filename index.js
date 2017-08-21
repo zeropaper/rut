@@ -448,7 +448,7 @@ module.exports = function rutServer(options, initFinished) {
     setup.db.model('User').findByUsername(setup.rutUsername, function (err, rutUser) {
       if (err) { return done(err); }
 
-      async.map(serviceNames, function (name, n) {
+      async.map(serviceNames, function (name, nextName) {
         var service = setup.services[name];
         // that part sucks... but i need it to work
         var redirectURI = options.env === 'development' ?
@@ -458,7 +458,7 @@ module.exports = function rutServer(options, initFinished) {
         Client.findOne({name:name})
         .populate('owner')
         .exec(function (err, client) {
-          if (err) { return n(err); }
+          if (err) { return nextName(err); }
           if (!client) {
             debug('  %s does not have client', name);
             return Client.create({
@@ -467,24 +467,24 @@ module.exports = function rutServer(options, initFinished) {
               redirectURI: redirectURI,
               secret: 'yadayada'
             }, function (err, client) {
-              if (err) { return n(err); }
+              if (err) { return nextName(err); }
               debug('    %s registered', name);
-              n(null, client.name);
+              nextName(null, client.name);
             });
           }
 
-          debug('  %s already have client owned by client.owner', name, client.owner);
+          debug('  %s already have client owned by %s', name, client.owner.username);
           if (client.redirectURI === redirectURI && client.owner) {
             debug('    %s already up-to-date', name);
-            return n(null, client.name);
+            return nextName(null, client.name);
           }
 
           client.owner = rutUser;
           client.redirectURI = redirectURI;
           client.save(function (err) {
-            if (err) { return n(err); }
+            if (err) { return nextName(err); }
             debug('    %s updated', name);
-            n(null, client.name);
+            nextName(null, client.name);
           });
         });
       }, done);

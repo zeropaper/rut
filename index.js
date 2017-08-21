@@ -341,7 +341,61 @@ module.exports = function rutServer(options, initFinished) {
   };
 
 
+  setupOperations.WS = function(setup, done) {
+    done = addAndPassSetup('WS', setup, done);
+    var User = setup.db.model('User');
+    var io = require('socket.io')(server, {
+      path: '/ws',
+      // serveClient: false,
+      // origins: '*'
+    });
 
+    function socketSessionId(socket, sessionCookieName) {
+      var cookies = {};
+      socket.handshake.headers.cookie
+        .split('; ')
+        .forEach(kv => {
+          kv = kv.split('=');
+          cookies[kv[0]] = decodeURIComponent(kv[1]);
+        });
+      return ((cookies[sessionCookieName] || '').split(/:|\./) || [])[1] || false;
+    }
+
+    function socketGetSession(socket, sessionStore, sessionId, next) {
+      sessionStore.get(sessionId, function (err, ioSession) {
+        if (!ioSession || !ioSession.passport || !ioSession.passport.user) return;
+        User.findByUsername(ioSession.passport.user, function(err, user) {
+          socket.user = user;
+          next(err, socket);
+        });
+      });
+    }
+
+
+    io.on('connection', function(socket) {
+      var sessionId = socketSessionId(socket, setup.sessionOptions.name);
+      debug('WS connection with session ID: %s', sessionId);
+      if (!sessionId) return;
+      debug('socket user username', (socket.user || {}).username);
+      socketGetSession(socket, setup.sessionOptions.store, sessionId, function() {
+        socket.on('appstatus', function(data, next) {
+          return next({
+            upSince: app._upSince
+          });
+        });
+        // if (!socket.user) return;
+        // socket.broadcast.emit('userconnect', {
+        //   username: socket.user.username
+        // });
+
+        // socket.emit('userwelcome', {
+        //   message: 'Hello ' + socket.user.username
+        // });
+      });
+    });
+
+    done(null, io);
+  };
 
 
   //

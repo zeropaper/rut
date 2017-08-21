@@ -15,20 +15,20 @@ block content
           a(href="/dump/" + modelName) dump
         a(href="/inspect") Models
     div.content
-      div.statics
-        h2 statics
+      details.statics
+        summary statics
         ul
           each fn, name in model.schema.statics
             li #{modelName}.
               code #{name}()
-      div.methods
-        h2 methods
+      details.methods
+        summary methods
         ul
           each fn, name in model.schema.methods
             li instance.
               code #{name}()
-      div.paths
-        h2 paths
+      details.paths
+        summary paths
         table#documents
           thead
             tr.path
@@ -42,4 +42,8 @@ block content
               each document in documents
                 tr
                   each path, name in model.schema.paths
-                    td #{document[name]}
+                    if name === '_id'
+                      td
+                        a(href='/inspect/' + modelName + '/' + document[name]) #{document[name]}
+                    else
+                      td #{document[name]}

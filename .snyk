@@ -9,3 +9,8 @@ patch:
   'npm:qs:20170213':
     - swagger-tools > body-parser > qs:
         patched: '2017-08-18T07:34:09.678Z'
+  'npm:debug:20170905':
+    - mongoose > mquery > debug:
+        patched: '2017-09-28T06:52:08.110Z'
+    - swagger-tools > body-parser > debug:
+        patched: '2017-09-28T06:52:08.110Z'

@@ -60,7 +60,7 @@
     "serve-static": "1.13.0",
     "snyk": "^1.41.1",
     "socket.io": "^2.0.3",
-    "swagger-client": "^2.2.21",
+    "swagger-client": "^3.0.1",
     "swagger-tools": "wickedest/swagger-tools#master",
     "yaml-js": "0.1.3"
   },
